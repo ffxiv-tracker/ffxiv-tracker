@@ -21,6 +21,13 @@ const useStyles = makeStyles((theme) => ({
     },
     menuButton: {
         marginRight: theme.spacing(2),
+        color: 'white',
+        '&:focus': {
+            backgroundColor: '#7e57c2',
+        },
+        '&:hover': {
+            backgroundColor: '#b39ddb',
+        },
     },
     title: {
         flexGrow: 1,
@@ -32,8 +39,19 @@ const useStyles = makeStyles((theme) => ({
         width: 'auto',
     },
     drawer: {
-        minweidth: '250px'
+        backgroundColor: '#fafafa',
     },
+    topBar: {
+        backgroundColor: '#7e57c2',
+    },
+    login: {
+        '&:focus': {
+            backgroundColor: '#7e57c2',
+        },
+        '&:hover': {
+            backgroundColor: '#b39ddb',
+        },
+    }
 }));
 
 export default function ButtonAppBar() {
@@ -74,19 +92,21 @@ export default function ButtonAppBar() {
 
     return (
         <div className={classes.root}>
-            <AppBar position="static">
+            <AppBar className={classes.topBar} position="static">
                 <Toolbar>
-                    <IconButton onClick={toggleDrawer(true)} edge="start" className={classes.menuButton} color="inherit" aria-label="menu">
+                    <IconButton onClick={toggleDrawer(true)} edge="start" className={classes.menuButton} aria-label="menu">
                         <MenuIcon />
                     </IconButton>
                     <Typography variant="h6" className={classes.title}>
+                        <Link className="white-text" to="/">
                         FFXIV Tracker
-          </Typography>
-                    <Button color="inherit">Login</Button>
+                        </Link>
+                    </Typography>
+                    <Button className={classes.login} color="inherit">Login</Button>
                 </Toolbar>
             </AppBar>
             <SwipeableDrawer
-                className={classes.drawer}
+                classes={{paper: classes.drawer}}
                 anchor={"left"}
                 open={state["left"]}
                 onClose={toggleDrawer(false)}
