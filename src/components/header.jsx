@@ -1,4 +1,5 @@
 import React from 'react';
+import { Link } from 'react-router-dom';
 import { makeStyles } from '@material-ui/core/styles';
 import AppBar from '@material-ui/core/AppBar';
 import Toolbar from '@material-ui/core/Toolbar';
@@ -11,7 +12,8 @@ import List from '@material-ui/core/List';
 import ListItem from '@material-ui/core/ListItem';
 import ListItemIcon from '@material-ui/core/ListItemIcon';
 import ListItemText from '@material-ui/core/ListItemText';
-import AndroidIcon from '@material-ui/icons/Android';
+import LinkIcon from '@material-ui/icons/Link';
+import HomeIcon from '@material-ui/icons/Home';
 
 const useStyles = makeStyles((theme) => ({
     root: {
@@ -28,6 +30,9 @@ const useStyles = makeStyles((theme) => ({
     },
     fullList: {
         width: 'auto',
+    },
+    drawer: {
+        minweidth: '250px'
     },
 }));
 
@@ -51,12 +56,18 @@ export default function ButtonAppBar() {
             onKeyDown={toggleDrawer(false)}
         >
             <List>
-                {['Plants', 'Hunts', 'Custom Deliveries'].map((text, index) => (
-                    <ListItem button key={text}>
-                        <ListItemIcon>{<AndroidIcon />}</ListItemIcon>
-                        <ListItemText primary={text} />
+                <Link className="menuLinks" to="/">
+                    <ListItem button>
+                        <ListItemIcon>{<HomeIcon />}</ListItemIcon>
+                        <ListItemText primary={"Home"} />
                     </ListItem>
-                ))}
+                </Link>
+                <Link className="menuLinks" to="/links">
+                    <ListItem button>
+                        <ListItemIcon>{<LinkIcon />}</ListItemIcon>
+                        <ListItemText primary={"Links"} />
+                    </ListItem>
+                </Link>
             </List>
         </div>
     );
@@ -75,6 +86,7 @@ export default function ButtonAppBar() {
                 </Toolbar>
             </AppBar>
             <SwipeableDrawer
+                className={classes.drawer}
                 anchor={"left"}
                 open={state["left"]}
                 onClose={toggleDrawer(false)}
