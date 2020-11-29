@@ -1,10 +1,12 @@
-.menuLinks {
-    display: flex;
-    width: 250px;
+@import '~antd/dist/antd.dark.css';
+
+[data-theme='compact'] .ant-drawer-body p {
+  margin-bottom: 0;
 }
+.gutter-row {
+    padding: 8px 0;
+  }
+
 .link-page {
-    margin-top: 5%;
-}
-.full-height {
-    height: 100%;
+    margin-top: 2%;
 }
