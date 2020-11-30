@@ -1,6 +1,6 @@
 import { Tabs } from 'antd';
 import DailyTasks from './daily';
-import WeeklyTasks from './weekly'
+import WeeklyTasks from './weekly';
 const { TabPane } = Tabs;
 
 export default function TaskTabs() {

@@ -1,6 +1,6 @@
 import { Col } from 'antd';
 import TaskCard from './taskCard';
-import DailyData from './daily.json';
+import DailyData from './dailyData.json';
 
 export default function DailyTasks() {
     return (
