@@ -25,7 +25,7 @@ export default class NavDrawer extends React.Component {
             <div>
                 <Layout>
                     <Header className="header">
-                        <Button onClick={this.showDrawer} type="primary"><MenuOutlined /></Button>
+                        <Button onClick={this.showDrawer}><MenuOutlined /></Button>
                     </Header>
                 </Layout>
                 <Drawer
@@ -36,10 +36,9 @@ export default class NavDrawer extends React.Component {
                     visible={visible}
                     key={"left"}
                 >
-                    <p>
-                        <Link to="/">Home</Link>
-                    </p>
+                    <p><Link to="/">Home</Link></p>
                     <p><Link to="/links">Links</Link></p>
+                    <p><Link to="/tasks">Tasks</Link></p>
                 </Drawer>
             </div>
 
