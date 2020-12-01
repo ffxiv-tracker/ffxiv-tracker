@@ -18,6 +18,7 @@
 }
 .task-card {
     margin: 1%;
+    width: 100%;
 }
 .centered {
     text-align: center;
@@ -25,3 +26,14 @@
 .task-button {
     margin: 0;
 }
+.custom-collapse {
+    display: flex;
+    align-items: center;
+}
+.custom-collapse-header {
+    margin: 1%;
+    width: 95%;
+}
+.ant-collapse > .ant-collapse-item > .ant-collapse-header {
+    padding: 0 !important;
+ }
