@@ -10,10 +10,18 @@
 .link-page {
     margin-top: 2%;
 }
+.task-page {
+    margin-top: 1%;
+}
 .tab-space {
     padding-top: 1%;
 }
 .task-card {
-    /* width: 12%; */
     margin: 1%;
+}
+.centered {
+    text-align: center;
+}
+.task-button {
+    margin: 0;
 }
