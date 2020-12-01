@@ -4,11 +4,11 @@ import DailyData from './dailyData.json';
 
 export default function DailyTasks() {
     return (
-        <div className="container link-page">
+        <div className="container task-page">
             <Col span={18} offset={3}>
-                {DailyData.map((task) => {
+                {DailyData.map((task, index) => {
                     return (
-                        <TaskCard title={task.task} />
+                        <TaskCard key={index} title={task.task} />
                     )
                 })}
             </Col>
