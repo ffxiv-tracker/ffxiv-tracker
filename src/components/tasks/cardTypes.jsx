@@ -1,33 +1,20 @@
 import React from 'react';
-import { Card, Checkbox, Col, Collapse, Row } from 'antd';
+import { Checkbox, Collapse, Row } from 'antd';
 const { Panel } = Collapse;
 
-const checkEvent = (event)=>{
-    console.log('event', event.target.className)
-    if (event.target.className !== "ant-checkbox-input") {
-        event.stopPropagation()
-    }
-
-}
-
-
-const genExtra = <Checkbox />
-
 export function ExpandingTask(props) {
-    const panelHeader = (
-        <div className="custom-collapse" onClick={checkEvent}>
-          <h2 className="custom-collapse-header">{props.title}</h2>
-          <span><Checkbox /></span>
-        </div>
-      )
+    const [checked, setChecked] = React.useState(false);
+    const onChange = () =>{
+        setChecked(!checked)
+    }
+    const checkbox = <Checkbox checked={checked} onChange={onChange} />
     return (
         <Row justify="space-between" align="middle">
-            <Collapse defaultActiveKey={['1']} className="task-card">
-                <Panel showArrow={false} header={panelHeader} key="1">
+            <Collapse defaultActiveKey={['1']} className={`task-card ${checked ? "checked-collapse" : ""}`}>
+                <Panel showArrow={false} header={props.title} key="1" extra={checkbox}>
                     <p>Expanded Stuff </p>
                 </Panel>
             </Collapse>
         </Row>
     )
 }
-

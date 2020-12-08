@@ -26,14 +26,7 @@
 .task-button {
     margin: 0;
 }
-.custom-collapse {
-    display: flex;
-    align-items: center;
+.checked-collapse {
+    background-color: #030852;
+    text-decoration: line-through;
 }
-.custom-collapse-header {
-    margin: 1%;
-    width: 95%;
-}
-.ant-collapse > .ant-collapse-item > .ant-collapse-header {
-    padding: 0 !important;
- }
