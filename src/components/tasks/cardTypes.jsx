@@ -8,13 +8,17 @@ export function ExpandingTask(props) {
         setChecked(!checked)
     }
     const checkbox = <Checkbox checked={checked} onChange={onChange} />
+    const { description, title} = props;
     return (
         <Row justify="space-between" align="middle">
-            <Collapse defaultActiveKey={['1']} className={`task-card ${checked ? "checked-collapse" : ""}`}>
-                <Panel showArrow={false} header={props.title} key="1" extra={checkbox}>
-                    <p>Expanded Stuff </p>
-                </Panel>
-            </Collapse>
+            {description.length !== 0 ? <Collapse defaultActiveKey={['1']} className={`task-card ${checked ? "checked-collapse" : ""}`}>
+                <Panel showArrow={false} header={title} key="1" extra={checkbox}>
+                    {description}
+                </Panel>      
+            </Collapse> : 
+            <Collapse className={`task-card ${checked ? "checked-collapse" : ""}`}>
+                <Panel disabled={true} showArrow={false} header={title} extra={checkbox} />
+            </Collapse>}
         </Row>
     )
 }
