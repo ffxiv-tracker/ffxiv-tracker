@@ -8,7 +8,7 @@ export default function WeeklyTasks() {
             <Col span={18} offset={3}>
                 {WeeklyData.map((task, index) => {
                     return (
-                        <TaskCard key={index} title={task.task} />
+                        <TaskCard key={index} title={task.task} description={task.description} />
                     )
                 })}
             </Col>
