@@ -1,26 +1,32 @@
 [
     {
         "task": "Daily Task 1",
-        "description": "Description 1"
+        "description": "Description 1",
+        "tags": ["DoW", "DoM", "Gold Saucer"]
     },
     {
         "task": "Daily Task 2",
-        "description": "Description 2"
+        "description": "Description 2",
+        "tags": ["DoW", "DoM", "Gold Saucer"]
     },
     {
         "task": "Daily Task 3",
-        "description": ""
+        "description": "",
+        "tags": ["DoW", "DoM", "Gold Saucer"]
     },
     {
         "task": "Daily Task 4",
-        "description": "Description 4"
+        "description": "Description 4",
+        "tags": ["DoW", "DoM", "Gold Saucer"]
     },
     {
         "task": "Daily Task 5",
-        "description": "Description 5"
+        "description": "Description 5",
+        "tags": ["DoW", "DoM", "Gold Saucer"]
     },
     {
         "task": "Daily Task 6",
-        "description": "Description 6"
+        "description": "Description 6",
+        "tags": ["DoW", "DoM", "Gold Saucer"]
     }
 ]

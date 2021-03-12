@@ -1,8 +1,8 @@
 import React from 'react';
-import { Button, Form, Input, Modal, Row, Tabs } from 'antd';
+import { Button, Col, Form, Input, Modal, Row, Typography } from 'antd';
 import DailyTasks from './daily';
 import WeeklyTasks from './weekly';
-const { TabPane } = Tabs;
+const { Title } = Typography;
 
 export default function TasksPage() {
     const [visible, setVisible] = React.useState(false);
@@ -39,24 +39,21 @@ export default function TasksPage() {
 
     return (
         <div className="tab-space">
-            <Tabs defaultActiveKey="1" type="card" size={"large"} centered>
-                <TabPane tab="Daily Tasks" key="1">
-                    <Row className="task-button" justify="center">
-                        <Button onClick={showModal} size="large">
-                            + Add New Task
-                        </Button>
-                    </Row>
+            <Row className="task-button" justify="center">
+                <Button onClick={showModal} size="large">
+                    + Add New Task
+                </Button>
+            </Row>
+            <Row>
+                <Col span={12}>
+                    <Title level={2} className="centered">Daily Tasks</Title>
                     <DailyTasks />
-                </TabPane>
-                <TabPane tab="Weekly Tasks" key="2">
-                    <Row className="task-button" justify="center">
-                        <Button onClick={showModal} size="large">
-                            + Add New Task
-                        </Button>
-                    </Row>
+                </Col>
+                <Col span={12}>
+                    <Title level={2} className="centered">Weekly Tasks</Title>
                     <WeeklyTasks />
-                </TabPane>
-            </Tabs>
+                </Col>
+            </Row>    
             <Modal
                 title="Add a New Task"
                 visible={visible}
