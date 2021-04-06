@@ -39,6 +39,7 @@ export default class NavDrawer extends React.Component {
                     <p><Link to="/">Home</Link></p>
                     <p><Link to="/links">Links</Link></p>
                     <p><Link to="/tasks">Tasks</Link></p>
+                    <p><Link to="/master-tasks">Master Tasks</Link></p>
                 </Drawer>
             </div>
 

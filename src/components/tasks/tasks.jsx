@@ -53,7 +53,7 @@ export default function TasksPage() {
                     <Title level={2} className="centered">Weekly Tasks</Title>
                     <WeeklyTasks />
                 </Col>
-            </Row>    
+            </Row>
             <Modal
                 title="Add a New Task"
                 visible={visible}

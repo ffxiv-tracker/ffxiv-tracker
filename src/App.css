@@ -38,3 +38,9 @@
     color: white;
     cursor: auto;
 }
+.ant-checkbox-group {
+    min-width: 100%;
+}
+.ant-checkbox-group-item {
+    padding: 1%;
+}

@@ -1,5 +1,5 @@
 import { Col } from 'antd';
-import TaskCard from './taskCard';
+import { CategoryTask } from  './cardTypes';
 import WeeklyData from './weeklyData.json';
 
 export default function WeeklyTasks() {
@@ -8,7 +8,7 @@ export default function WeeklyTasks() {
             <Col span={18} offset={3}>
                 {WeeklyData.map((task, index) => {
                     return (
-                        <TaskCard key={index} title={task.task} description={task.description} tags={task.tags} />
+                        <CategoryTask key={index} category={task.task} name={task.description} tags={task.tags} type="personal" />
                     )
                 })}
             </Col>

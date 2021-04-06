@@ -1,62 +1,44 @@
 import React, { useEffect } from 'react';
-import { Checkbox, Collapse, Row, Tag } from 'antd';
+import { Button, Checkbox, Collapse, Row, Tag } from 'antd';
 const { Panel } = Collapse;
-
-export function ExpandingTask(props) {
-    const [checked, setChecked] = React.useState(false);
-    const onChange = () =>{
-        setChecked(!checked)
-    }
-    const checkbox = <Checkbox checked={checked} onChange={onChange} />
-    const { description, title, tags} = props;
-    return (
-        <Row justify="space-between" align="middle">
-            {description.length !== 0 ? <Collapse defaultActiveKey={['1']} className={`task-card ${checked ? "checked-collapse" : ""}`}>
-                <Panel showArrow={false} header={title} key="1" extra={checkbox}>
-                    <Row className="task-description">{description}</Row>
-                    <Row className="tag-space">
-                        {tags.map((tagValue)=>{
-                            return (
-                                <Tag>{tagValue}</Tag>
-                            )
-                        })}
-                    </Row>
-                </Panel>      
-            </Collapse> : 
-            <Collapse className={`task-card ${checked ? "checked-collapse" : ""}`}>
-                <Panel disabled={true} showArrow={false} header={title} extra={checkbox} />
-            </Collapse>}
-        </Row>
-    )
-}
 
 export function CategoryTask(props) {
     const [checked, setChecked] = React.useState(false);
-    const onChange = () =>{
+    const [selectedTasks, setSelectedTasks] = React.useState([]);
+    const [loaded, setLoaded] = React.useState(false);
+    const { category, name, tags, type } = props;
+    const onCategoryChange = () =>{
         setChecked(!checked)
     }
-    const checkbox = <Checkbox checked={checked} onChange={onChange} />
-    const { category, name, frequency, orphan, tags } = props;
-    let categoryName = ""
+    function onSubmit(event) {
+        event.stopPropagation();
+        console.log("Submit Tasks", selectedTasks)
+    }
+    function onCategorySubmit(event) {
+        const tasks = [category]
+        setSelectedTasks(tasks)
+        event.stopPropagation();
+        console.log("Submit Tasks", selectedTasks)
+    }
+    function onTaskChange(checkedValues) {
+        setSelectedTasks(checkedValues)
+        console.log('checked = ', checkedValues);
+    }
+    const categoryCheckbox = <Checkbox checked={checked} onChange={onCategoryChange} />
+    const categorySubmit = <Button type="primary" onClick={onCategorySubmit}>Add Tasks</Button>
+    const taskSubmit = <Button type="primary" onClick={onSubmit}>Add Tasks</Button>
+
     useEffect(() => {
-        const setCategoryName=()=>{
-            console.log("orphan", orphan)
-            if(orphan === true){
-                categoryName = name
-            } else {
-                categoryName = category
-            }
-            console.log("name", categoryName)
-        }
-        
-        setCategoryName();
-      }, []);
-    
+        setLoaded(true);
+    }, []);
     return (
-        <Row justify="space-between" align="middle">
+        <div className="tab-space">
+            {loaded ? <Row justify="space-between" align="middle">
             {name.length !== 0 ? <Collapse defaultActiveKey={['1']} className={`task-card ${checked ? "checked-collapse" : ""}`}>
-                <Panel showArrow={false} header={categoryName} key="1" extra={checkbox}>
-                    <Row className="task-description">{name}</Row>
+                <Panel showArrow={false} header={category} key="1" extra={type==="master" ? taskSubmit : categoryCheckbox}>
+                    <Row className="task-description">
+                        <Checkbox.Group options={name} onChange={onTaskChange} />
+                    </Row>
                     <Row className="tag-space">
                         {tags.map((tagValue)=>{
                             return (
@@ -64,11 +46,13 @@ export function CategoryTask(props) {
                             )
                         })}
                     </Row>
-                </Panel>      
-            </Collapse> : 
+                </Panel>
+            </Collapse> :
             <Collapse className={`task-card ${checked ? "checked-collapse" : ""}`}>
-                <Panel disabled={true} showArrow={false} header={categoryName} extra={checkbox} />
+                <Panel disabled={true} showArrow={false} header={category} extra={type==="master" ? categorySubmit : categoryCheckbox} />
             </Collapse>}
-        </Row>
+        </Row> : null
+            }
+        </div>
     )
 }
