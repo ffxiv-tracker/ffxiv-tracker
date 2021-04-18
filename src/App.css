@@ -10,10 +10,40 @@
 .link-page {
     margin-top: 2%;
 }
-.tab-space {
-    padding-top: 1%;
+.task-page {
+    margin-top: 1%;
+}
+.tag-space {
+    padding-top: 3%;
+}
+.task-description {
+    padding-bottom: 3%;
 }
 .task-card {
-    /* width: 12%; */
     margin: 1%;
+    width: 100%;
+}
+.centered {
+    text-align: center;
+}
+.task-button {
+    margin: 0;
+    padding-top: 2%;
+}
+.checked-collapse {
+    background-color: #030852;
+    text-decoration: line-through;
+}
+.ant-collapse .ant-collapse-item-disabled > .ant-collapse-header {
+    color: white;
+    cursor: auto;
+}
+.ant-checkbox-group {
+    min-width: 100%;
+}
+.ant-checkbox-group-item {
+    padding: 1%;
+}
+.ant-col-fix {
+    padding: 12px;
 }
