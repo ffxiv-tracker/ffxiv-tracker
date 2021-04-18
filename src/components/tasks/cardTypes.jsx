@@ -6,7 +6,7 @@ export function CategoryTask(props) {
     const [checked, setChecked] = React.useState(false);
     const [selectedTasks, setSelectedTasks] = React.useState([]);
     const [loaded, setLoaded] = React.useState(false);
-    const { category, name, tags, type } = props;
+    const { category, name, tags, type, tasks} = props;
     const onCategoryChange = () =>{
         setChecked(!checked)
     }
@@ -34,10 +34,10 @@ export function CategoryTask(props) {
     return (
         <div className="tab-space">
             {loaded ? <Row justify="space-between" align="middle">
-            {name.length !== 0 ? <Collapse defaultActiveKey={['1']} className={`task-card ${checked ? "checked-collapse" : ""}`}>
+            <Collapse defaultActiveKey={['1']} className={`task-card ${checked ? "checked-collapse" : ""}`}>
                 <Panel showArrow={false} header={category} key="1" extra={type==="master" ? taskSubmit : categoryCheckbox}>
                     <Row className="task-description">
-                        <Checkbox.Group options={name} onChange={onTaskChange} />
+                        <Checkbox.Group options={tasks} onChange={onTaskChange} />
                     </Row>
                     <Row className="tag-space">
                         {tags.map((tagValue)=>{
@@ -47,10 +47,7 @@ export function CategoryTask(props) {
                         })}
                     </Row>
                 </Panel>
-            </Collapse> :
-            <Collapse className={`task-card ${checked ? "checked-collapse" : ""}`}>
-                <Panel disabled={true} showArrow={false} header={category} extra={type==="master" ? categorySubmit : categoryCheckbox} />
-            </Collapse>}
+            </Collapse>
         </Row> : null
             }
         </div>
