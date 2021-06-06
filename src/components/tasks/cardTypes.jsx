@@ -10,6 +10,17 @@ export function CategoryTask(props) {
     const onCategoryChange = () =>{
         setChecked(!checked)
     }
+    function addData() {
+        if (type == "master"){
+            if (category === "Daily Hunts") {
+                return (
+                    <Button className="margin-auto" type="primary" target="noreferrer noopener" href={"https://www.ffxivhuntpaths.com"}>
+                        FFXIV Hunt Paths
+                    </Button>
+                )
+            } else return null;
+        }
+    }
     function onSubmit(event) {
         event.stopPropagation();
         console.log("Submit Tasks", selectedTasks)
@@ -38,6 +49,9 @@ export function CategoryTask(props) {
                 <Panel showArrow={false} header={category} key="1" extra={type==="master" ? taskSubmit : categoryCheckbox}>
                     <Row className="task-description">
                         <Checkbox.Group options={tasks} onChange={onTaskChange} />
+                    </Row>
+                    <Row className="task-description">
+                        {addData()}
                     </Row>
                     <Row className="tag-space">
                         {tags.map((tagValue)=>{
