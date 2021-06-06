@@ -6,7 +6,9 @@
 .gutter-row {
     padding: 8px 0;
   }
-
+.margin-auto {
+    margin:auto;
+}
 .link-page {
     margin-top: 2%;
 }
