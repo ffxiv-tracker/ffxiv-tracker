@@ -7,8 +7,7 @@ const { Title } = Typography;
 export default function TasksPage() {
     const [visible, setVisible] = React.useState(false);
     const [newTask, setNewTask] = React.useState({});
-    const [dailyTasks, setDailyTasks] = React.useState([]);
-    const [weeklyTasks, setWeeklyTasks] = React.useState([]);
+    const [tasks, setTasks] = React.useState([]);
     const [form] = Form.useForm();
     const layout = {
         labelCol: { span: 8 },
@@ -17,29 +16,13 @@ export default function TasksPage() {
     const tailLayout = {
         wrapperCol: { offset: 8, span: 16 },
     };
-    function sortTasks(tasks, frequency){
-        let sortedDaily = []
-        let sortedWeekly = []
-        tasks.map((category)=>{
-            if (category.frequency === "Weekly"){
-                sortedWeekly.push(category)
-                console.log('task', category)
-            }
-            if (category.frequency === "Daily"){
-                sortedDaily.push(category)
-            }
-        })
-        console.log("daily", sortedDaily)
-        console.log("weekly", sortedWeekly)
-        setWeeklyTasks(sortedWeekly)
-        setDailyTasks(sortedDaily)
-    }
+
     useEffect(() => {
         const fetchData = async () => {
             const result = await axios(
-                'https://api.beta.ffxiv.anid.dev/user/tasks',
+                'https://hdnss8awo4.execute-api.us-west-2.amazonaws.com/user/tasks',
             );
-            sortTasks(result.data);
+            setTasks(result.data);
         };
         fetchData();
     }, []);
@@ -74,8 +57,7 @@ export default function TasksPage() {
             <Row className="task-page" justify="center">
                 <Col span={10} className="ant-col-fix">
                     <Title level={2} className="centered">Daily Tasks</Title>
-                    {dailyTasks.map((task, index) => {
-                        console.log("task", task)
+                    {tasks.filter(t => t.frequency === 'Daily').map((task, index) => {
                         return (
                             <CategoryTask key={index} category={task.category} tasks={task.tasks} tags={[]} frequency="daily" type="" />
                         )
@@ -83,7 +65,7 @@ export default function TasksPage() {
                 </Col>
                 <Col span={10} className="ant-col-fix">
                     <Title level={2} className="centered">Weekly Tasks</Title>
-                    {weeklyTasks.map((task, index) => {
+                    {tasks.filter(t => t.frequency === 'Weekly').map((task, index) => {
                         return (
                             <CategoryTask key={index} category={task.category} tasks={task.tasks} tags={[]} frequency="weekly" type="" />
                         )

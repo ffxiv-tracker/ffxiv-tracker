@@ -6,7 +6,6 @@ const { Panel } = Collapse;
 export function CategoryTask(props) {
     const { category, frequency, currentTasks, tags, type, tasks} = props;
     const [checked, setChecked] = React.useState(false);
-    // const [checkboxTasks, setCheckboxTasks] = React.useState(currentTasks);
     const [selectedTasks, setSelectedTasks] = React.useState(currentTasks);
     const [loaded, setLoaded] = React.useState(false);
     const onCategoryChange = () =>{
@@ -28,7 +27,7 @@ export function CategoryTask(props) {
             'https://hdnss8awo4.execute-api.us-west-2.amazonaws.com/user/tasks', submittedTasks);
         console.log("results", result)
     };
-    function onSubmit(event) {
+    function onTaskSubmit(event) {
         event.stopPropagation();
     }
     function onCategorySubmit(event) {
@@ -43,11 +42,15 @@ export function CategoryTask(props) {
         saveData(savedTasks);
     }
     function onTaskChange(checkedValues) {
+        console.log('completed task', checkedValues)
+        setSelectedTasks(checkedValues)
+    }
+    function onCategoryTaskChange(checkedValues) {
         setSelectedTasks(checkedValues)
     }
     const categoryCheckbox = <Checkbox checked={checked} onChange={onCategoryChange} />
     const categorySubmit = <Button type="primary" onClick={onCategorySubmit}>Add Tasks</Button>
-    const taskSubmit = <Button type="primary" onClick={onSubmit}>Add Tasks</Button>
+    const taskSubmit = <Button type="primary" onClick={onTaskSubmit}>Add Tasks</Button>
 
     useEffect(() => {
         setLoaded(true);
@@ -58,7 +61,8 @@ export function CategoryTask(props) {
             <Collapse defaultActiveKey={['1']} className={`task-card ${checked ? "checked-collapse" : ""}`}>
                 <Panel showArrow={false} header={category} key="1" extra={type==="master" ? categorySubmit : categoryCheckbox}>
                     <Row className="task-description">
-                        <Checkbox.Group options={tasks} value={selectedTasks} onChange={onTaskChange} />
+                        {type==="master" ? <Checkbox.Group options={tasks} value={selectedTasks} onChange={onCategoryTaskChange} /> :
+                        <Checkbox.Group options={tasks} value={selectedTasks} onChange={onTaskChange} />}
                     </Row>
                     <Row className="task-description">
                         {addData()}
