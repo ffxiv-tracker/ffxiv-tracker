@@ -27,14 +27,11 @@ export function CategoryTask(props) {
         const result = await axios.post(
             'https://hdnss8awo4.execute-api.us-west-2.amazonaws.com/user/tasks', submittedTasks);
         console.log("results", result)
-        // console.log("results", submittedTasks)
     };
     function onSubmit(event) {
         event.stopPropagation();
-        console.log("Submit Tasks", selectedTasks)
     }
     function onCategorySubmit(event) {
-        console.log('props', props)
         let savedTasks = {
             "category": "",
             frequency,
@@ -44,11 +41,9 @@ export function CategoryTask(props) {
         savedTasks.tasks = selectedTasks
         event.stopPropagation();
         saveData(savedTasks);
-        console.log("Submit Tasks", savedTasks)
     }
     function onTaskChange(checkedValues) {
         setSelectedTasks(checkedValues)
-        console.log('checked = ', checkedValues);
     }
     const categoryCheckbox = <Checkbox checked={checked} onChange={onCategoryChange} />
     const categorySubmit = <Button type="primary" onClick={onCategorySubmit}>Add Tasks</Button>
