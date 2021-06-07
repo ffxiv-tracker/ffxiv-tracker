@@ -23,6 +23,7 @@ export default function TasksPage() {
         tasks.map((category)=>{
             if (category.frequency === "Weekly"){
                 sortedWeekly.push(category)
+                console.log('task', category)
             }
             if (category.frequency === "Daily"){
                 sortedDaily.push(category)
@@ -74,8 +75,9 @@ export default function TasksPage() {
                 <Col span={10} className="ant-col-fix">
                     <Title level={2} className="centered">Daily Tasks</Title>
                     {dailyTasks.map((task, index) => {
+                        console.log("task", task)
                         return (
-                            <CategoryTask key={index} category={task.category} tasks={task.tasks} tags={[]} type="" />
+                            <CategoryTask key={index} category={task.category} tasks={task.tasks} tags={[]} frequency="daily" type="" />
                         )
                     })}
                 </Col>
@@ -83,7 +85,7 @@ export default function TasksPage() {
                     <Title level={2} className="centered">Weekly Tasks</Title>
                     {weeklyTasks.map((task, index) => {
                         return (
-                            <CategoryTask key={index} category={task.category} tasks={task.tasks} tags={[]} type="" />
+                            <CategoryTask key={index} category={task.category} tasks={task.tasks} tags={[]} frequency="weekly" type="" />
                         )
                     })}
                 </Col>

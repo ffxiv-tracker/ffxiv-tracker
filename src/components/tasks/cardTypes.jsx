@@ -1,17 +1,19 @@
 import React, { useEffect } from 'react';
+import axios from 'axios';
 import { Button, Checkbox, Collapse, Row, Tag } from 'antd';
 const { Panel } = Collapse;
 
 export function CategoryTask(props) {
+    const { category, frequency, currentTasks, tags, type, tasks} = props;
     const [checked, setChecked] = React.useState(false);
-    const [selectedTasks, setSelectedTasks] = React.useState([]);
+    // const [checkboxTasks, setCheckboxTasks] = React.useState(currentTasks);
+    const [selectedTasks, setSelectedTasks] = React.useState(currentTasks);
     const [loaded, setLoaded] = React.useState(false);
-    const { category, name, tags, type, tasks} = props;
     const onCategoryChange = () =>{
         setChecked(!checked)
     }
     function addData() {
-        if (type == "master"){
+        if (type !== "master"){
             if (category === "Daily Hunts") {
                 return (
                     <Button className="margin-auto" type="primary" target="noreferrer noopener" href={"https://www.ffxivhuntpaths.com"}>
@@ -21,15 +23,28 @@ export function CategoryTask(props) {
             } else return null;
         }
     }
+    const saveData = async (submittedTasks) => {
+        const result = await axios.post(
+            'https://hdnss8awo4.execute-api.us-west-2.amazonaws.com/user/tasks', submittedTasks);
+        console.log("results", result)
+        // console.log("results", submittedTasks)
+    };
     function onSubmit(event) {
         event.stopPropagation();
         console.log("Submit Tasks", selectedTasks)
     }
     function onCategorySubmit(event) {
-        const tasks = [category]
-        setSelectedTasks(tasks)
+        console.log('props', props)
+        let savedTasks = {
+            "category": "",
+            frequency,
+            "tasks": []
+        }
+        savedTasks.category = category
+        savedTasks.tasks = selectedTasks
         event.stopPropagation();
-        console.log("Submit Tasks", selectedTasks)
+        saveData(savedTasks);
+        console.log("Submit Tasks", savedTasks)
     }
     function onTaskChange(checkedValues) {
         setSelectedTasks(checkedValues)
@@ -46,9 +61,9 @@ export function CategoryTask(props) {
         <div className="tab-space">
             {loaded ? <Row justify="space-between" align="middle">
             <Collapse defaultActiveKey={['1']} className={`task-card ${checked ? "checked-collapse" : ""}`}>
-                <Panel showArrow={false} header={category} key="1" extra={type==="master" ? taskSubmit : categoryCheckbox}>
+                <Panel showArrow={false} header={category} key="1" extra={type==="master" ? categorySubmit : categoryCheckbox}>
                     <Row className="task-description">
-                        <Checkbox.Group options={tasks} onChange={onTaskChange} />
+                        <Checkbox.Group options={tasks} value={selectedTasks} onChange={onTaskChange} />
                     </Row>
                     <Row className="task-description">
                         {addData()}
