@@ -59,7 +59,7 @@ export default function TasksPage() {
                     <Title level={2} className="centered">Daily Tasks</Title>
                     {tasks.filter(t => t.frequency === 'Daily').map((task, index) => {
                         return (
-                            <CategoryTask key={index} category={task.category} tasks={task.tasks} tags={[]} frequency="daily" type="" />
+                            <CategoryTask key={index} category={task.category} tasks={task.tasks} tags={[]} frequency="Daily" type="" />
                         )
                     })}
                 </Col>
@@ -67,7 +67,7 @@ export default function TasksPage() {
                     <Title level={2} className="centered">Weekly Tasks</Title>
                     {tasks.filter(t => t.frequency === 'Weekly').map((task, index) => {
                         return (
-                            <CategoryTask key={index} category={task.category} tasks={task.tasks} tags={[]} frequency="weekly" type="" />
+                            <CategoryTask key={index} category={task.category} tasks={task.tasks} tags={[]} frequency="Weekly" type="" />
                         )
                     })}
                 </Col>

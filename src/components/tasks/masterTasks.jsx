@@ -12,8 +12,12 @@ export default function DailyTasks() {
         const currentTaskCategories = []
         let updatedTasks = []
         userData.map((task)=>{
+            let parsedTasks = []
             currentTaskCategories.push(task.category)
-            currentTasks[task.category] = task.tasks
+            task.tasks.map((names)=>{
+                parsedTasks.push(names.name)
+            })
+            currentTasks[task.category] = parsedTasks
         })
         masterData.map((task)=>{
             let updatedCategory = {...task}

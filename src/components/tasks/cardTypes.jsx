@@ -1,16 +1,35 @@
 import React, { useEffect } from 'react';
 import axios from 'axios';
 import { Button, Checkbox, Collapse, Row, Tag } from 'antd';
+import TaskCheckbox from './taskCheckbox';
 const { Panel } = Collapse;
 
 export function CategoryTask(props) {
     const { category, frequency, currentTasks, tags, type, tasks} = props;
     const [checked, setChecked] = React.useState(false);
     const [selectedTasks, setSelectedTasks] = React.useState(currentTasks);
+    const [disabled, setDisabled] = React.useState(false);
     const [loaded, setLoaded] = React.useState(false);
-    const onCategoryChange = () =>{
-        setChecked(!checked)
-    }
+    const checkCompletion = async () => {
+        let task = {
+            "category": category,
+            "frequency": frequency,
+            "done": !checked
+        };
+        const result = await axios.post(
+            'https://hdnss8awo4.execute-api.us-west-2.amazonaws.com/user/tasks/current', task)
+            .then( response => {
+                console.log("results", response.data)
+            })
+        return result
+    };
+    const onCategoryChange = () => {
+        console.log("stuff")
+        setDisabled(true)
+        setTimeout(function(){ setDisabled(false); }, 500);
+        checkCompletion();
+        setChecked(!checked);
+    };
     function addData() {
         if (type !== "master"){
             if (category === "Daily Hunts") {
@@ -41,14 +60,10 @@ export function CategoryTask(props) {
         event.stopPropagation();
         saveData(savedTasks);
     }
-    function onTaskChange(checkedValues) {
-        console.log('completed task', checkedValues)
-        setSelectedTasks(checkedValues)
-    }
     function onCategoryTaskChange(checkedValues) {
         setSelectedTasks(checkedValues)
     }
-    const categoryCheckbox = <Checkbox checked={checked} onChange={onCategoryChange} />
+    const categoryCheckbox = <Checkbox checked={checked} onChange={onCategoryChange} disabled={disabled} />
     const categorySubmit = <Button type="primary" onClick={onCategorySubmit}>Add Tasks</Button>
     const taskSubmit = <Button type="primary" onClick={onTaskSubmit}>Add Tasks</Button>
 
@@ -62,7 +77,9 @@ export function CategoryTask(props) {
                 <Panel showArrow={false} header={category} key="1" extra={type==="master" ? categorySubmit : categoryCheckbox}>
                     <Row className="task-description">
                         {type==="master" ? <Checkbox.Group options={tasks} value={selectedTasks} onChange={onCategoryTaskChange} /> :
-                        <Checkbox.Group options={tasks} value={selectedTasks} onChange={onTaskChange} />}
+                        tasks.map((task)=>{
+                            return <TaskCheckbox category={category} frequency={frequency} name={task.name} status={task.done}  />
+                        })}
                     </Row>
                     <Row className="task-description">
                         {addData()}
