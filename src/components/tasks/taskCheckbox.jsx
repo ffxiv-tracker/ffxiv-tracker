@@ -4,12 +4,22 @@ import { Checkbox } from 'antd';
 
 export default function TaskCheckbox(props) {
     const { category, frequency, name, status } = props;
-    const [checked, setChecked] = React.useState(false);
+    const [checked, setChecked] = React.useState(status);
     const [disabled, setDisabled] = React.useState(false);
+    const [categoryState, setCategoryState] = React.useState(props.checkAll);
+    console.log('props', props.checkAll)
+
+    useEffect( () => {
+        setCategoryState(props.checkAll);
+    }, [props.checkAll]);
+
+    const observantStatus = categoryState ? true : checked
+
     const toggleChecked = () => {
         setDisabled(true)
         setTimeout(function(){ setDisabled(false); }, 500);
         checkCompletion();
+        props.updateStatus(!checked)
         setChecked(!checked);
     };
     const checkCompletion = async () => {
@@ -28,6 +38,6 @@ export default function TaskCheckbox(props) {
     };
 
     return (
-        <Checkbox checked={checked} defaultChecked={status} onChange={toggleChecked} disabled={disabled}>{name}</Checkbox>
+        <Checkbox checked={observantStatus}  onChange={toggleChecked} disabled={disabled}>{name}</Checkbox>
     )
 }

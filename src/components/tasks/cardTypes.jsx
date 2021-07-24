@@ -9,6 +9,7 @@ export function CategoryTask(props) {
     const [checked, setChecked] = React.useState(false);
     const [selectedTasks, setSelectedTasks] = React.useState(currentTasks);
     const [disabled, setDisabled] = React.useState(false);
+    const [status, setStatus] = React.useState([]);
     const [loaded, setLoaded] = React.useState(false);
     const checkCompletion = async () => {
         let task = {
@@ -24,7 +25,7 @@ export function CategoryTask(props) {
         return result
     };
     const onCategoryChange = () => {
-        console.log("stuff")
+        console.log("stuff", tasks)
         setDisabled(true)
         setTimeout(function(){ setDisabled(false); }, 500);
         checkCompletion();
@@ -46,9 +47,6 @@ export function CategoryTask(props) {
             'https://hdnss8awo4.execute-api.us-west-2.amazonaws.com/user/tasks', submittedTasks);
         console.log("results", result)
     };
-    function onTaskSubmit(event) {
-        event.stopPropagation();
-    }
     function onCategorySubmit(event) {
         let savedTasks = {
             "category": "",
@@ -65,9 +63,33 @@ export function CategoryTask(props) {
     }
     const categoryCheckbox = <Checkbox checked={checked} onChange={onCategoryChange} disabled={disabled} />
     const categorySubmit = <Button type="primary" onClick={onCategorySubmit}>Add Tasks</Button>
-    const taskSubmit = <Button type="primary" onClick={onTaskSubmit}>Add Tasks</Button>
+
+    function updateStatus(childStatus){
+        const newStatus = [...status]
+        newStatus.push(childStatus)
+        if (!newStatus.includes(false)){
+            setChecked(true)
+        }
+    }
+// This is the function I was messing with, the child checkbox calls it and passes it's new status up to the parent, with the goal of the parent being able to check if all child checkboxes have been checked, and then update.
+    function checkTaskStatus(){
+        // tasks.map((task)=>{
+        //     const status = []
+        //     status.push(task.done)
+        //     const completed = !status.includes(false)
+        //     setChecked(completed)
+
+        // })
+    }
 
     useEffect(() => {
+        tasks.map((task)=>{
+            const status = []
+            status.push(task.done)
+            const completed = !status.includes(false)
+            setChecked(completed)
+
+        })
         setLoaded(true);
     }, []);
     return (
@@ -78,7 +100,8 @@ export function CategoryTask(props) {
                     <Row className="task-description">
                         {type==="master" ? <Checkbox.Group options={tasks} value={selectedTasks} onChange={onCategoryTaskChange} /> :
                         tasks.map((task)=>{
-                            return <TaskCheckbox category={category} frequency={frequency} name={task.name} status={task.done}  />
+                            console.log("task", task)
+                            return <TaskCheckbox category={category} frequency={frequency} name={task.name} status={task.done} checkAll={checked} updateStatus={checkTaskStatus.bind(this)} />
                         })}
                     </Row>
                     <Row className="task-description">
