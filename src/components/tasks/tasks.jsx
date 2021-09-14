@@ -75,8 +75,17 @@ export default function TasksPage() {
                     <Col span={10} className="ant-col-fix">
                         <Title level={2} className="centered">Weekly Tasks</Title>
                         {data.filter(t => t.frequency === 'Weekly').map((task, index) => {
+                            console.log("task before component", task.tasks)
+                            let names = []
+                            let done = []
+                            task.tasks.map((task)=>{
+                                names.push(task.name)
+                                if(task.done === true){
+                                    done.push(task.name)
+                                }
+                            })
                             return (
-                                <CategoryTask key={index} category={task.category} tasks={task.tasks} tags={[]} frequency="Weekly" type="" />
+                                <CategoryTask key={index} category={task.category} tasks={task.tasks} taskNames={names} completeTasks={done} tags={[]} frequency="Weekly" type="" />
                             )
                         })}
                     </Col>
