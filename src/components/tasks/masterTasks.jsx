@@ -6,7 +6,7 @@ const { Title } = Typography;
 
 export default function DailyTasks() {
     const [combinedTasks, setCombinedTasks] = React.useState([]);
-    const {loading, setLoading} = React.useState(true);
+    const [loading, setLoading] = React.useState(true);
 
     function combineTasks(userData, masterData){
         let currentTasks = {}
@@ -21,7 +21,10 @@ export default function DailyTasks() {
             currentTasks[task.category] = parsedTasks
         })
         masterData.map((task)=>{
-            let updatedCategory = {...task}
+            let updatedCategory = {
+                ...task,
+                currentTasks: []
+            }
             if(currentTaskCategories.includes(task.category)){
                 updatedCategory.currentTasks = currentTasks[task.category]
             }
@@ -69,8 +72,6 @@ export default function DailyTasks() {
                 <Col span={10} className="ant-col-fix">
                     <Title level={2} className="centered">Weekly Tasks</Title>
                     {combinedTasks.filter(t => t.frequency === 'Weekly').map((task, index) => {
-                        console.log("tasks", task.tasks)
-                        console.log("current", task.currentTasks)
                         return (
                             <CategoryTask key={index} category={task.category} taskNames={task.tasks} completeTasks={task.currentTasks} tags={[]} type="master" frequency={task.frequency} />
                         )
