@@ -66,16 +66,12 @@ export default function TasksPage() {
                 <Row className="task-page" justify="center">
                     <Col span={10} className="ant-col-fix">
                         <Title level={2} className="centered">Daily Tasks</Title>
-                        {data.filter(t => t.frequency === 'Daily').map((task, index) => {
+                        {/* {data.filter(t => t.frequency === 'Daily').map((task, index) => {
                             return (
                                 <CategoryTask key={index} category={task.category} tasks={task.tasks} tags={[]} frequency="Daily" type="" />
                             )
-                        })}
-                    </Col>
-                    <Col span={10} className="ant-col-fix">
-                        <Title level={2} className="centered">Weekly Tasks</Title>
-                        {data.filter(t => t.frequency === 'Weekly').map((task, index) => {
-                            console.log("task before component", task.tasks)
+                        })} */}
+                        {data.filter(t => t.frequency === 'Daily').map((task, index) => {
                             let names = []
                             let done = []
                             task.tasks.map((task)=>{
@@ -84,6 +80,24 @@ export default function TasksPage() {
                                     done.push(task.name)
                                 }
                             })
+                            console.log("done", done)
+                            return (
+                                <CategoryTask key={index} category={task.category} tasks={task.tasks} taskNames={names} completeTasks={done} tags={[]} frequency="Daily" type="" />
+                            )
+                        })}
+                    </Col>
+                    <Col span={10} className="ant-col-fix">
+                        <Title level={2} className="centered">Weekly Tasks</Title>
+                        {data.filter(t => t.frequency === 'Weekly').map((task, index) => {
+                            let names = []
+                            let done = []
+                            task.tasks.map((task)=>{
+                                names.push(task.name)
+                                if(task.done === true){
+                                    done.push(task.name)
+                                }
+                            })
+                            console.log("done", done)
                             return (
                                 <CategoryTask key={index} category={task.category} tasks={task.tasks} taskNames={names} completeTasks={done} tags={[]} frequency="Weekly" type="" />
                             )

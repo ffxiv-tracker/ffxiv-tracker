@@ -1,57 +1,60 @@
 import React, { useEffect } from 'react';
-import axios from 'axios';
 import { Button, Checkbox, Collapse, Row, Tag } from 'antd';
-import TaskCheckbox from './taskCheckbox';
 import { useSaveNewTasksMutation, useUpdateUserTaskMutation } from '../../services/tracker.ts'
 const { Panel } = Collapse;
+const CheckboxGroup = Checkbox.Group;
 
 export function CategoryTask(props) {
     const { category, frequency, currentTasks, tags, type, tasks, taskNames, completeTasks} = props;
-    const [checked, setChecked] = React.useState(false);
-    const [groupChecked, setGroupChecked] = React.useState(completeTasks);
+    const [checked, setChecked] = React.useState(completeTasks.length === taskNames.length);
     const [selectedTasks, setSelectedTasks] = React.useState(currentTasks);
-    const [disabled, setDisabled] = React.useState(false);
     const [loaded, setLoaded] = React.useState(false);
+    const [checkedList, setCheckedList] = React.useState(completeTasks);
+    const [indeterminate, setIndeterminate] = React.useState(false);
+    const [checkAll, setCheckAll] = React.useState(false);
     const [updateUserTask] = useUpdateUserTaskMutation();
     const [newUserTask] = useSaveNewTasksMutation();
-    const checkCompletion = async () => {
+
+// Indeterminate Functions
+    const onIndeterminateChange = async (checkedList) => {
+        setCheckedList(checkedList)
+        setIndeterminate(!!checkedList.length && checkedList.length < taskNames.length)
+        setCheckAll(checkedList.length === taskNames.length)
+        if (checkedList.length === taskNames.length){
+            setChecked(true)
+        } else {
+            setChecked(false)
+        }
+    };
+    const onSingleChange = async (event) => {
         let task = {
             "category": category,
             "frequency": frequency,
-            "done": !checked
+            "task": event.target.value,
+            "done": event.target.checked
         };
+        // console.log("task", task)
         updateUserTask(task)
-    };
-    const checkTaskCompletion = async (name) => {
 
+    };
+    const onCheckAllIndeterminateChange = async (e) => {
+        setCheckedList(e.target.checked ? taskNames : [])
+        setIndeterminate(false)
+        setCheckAll(e.target.checked)
+        categoryCompletion(e.target.checked)
+        setChecked(e.target.checked)
+    };
+
+// Update single user task
+    const categoryCompletion = async (checked) => {
         let task = {
             "category": category,
             "frequency": frequency,
-            "task": name,
-            "done": !checked
+            "done": checked
         };
-        console.log("task", task)
-        
         updateUserTask(task)
     };
-    const onCategoryChange = () => {
-        console.log("stuff")
-        setDisabled(true)
-        setTimeout(function(){ setDisabled(false); }, 500);
-        // checkCompletion();
-        setChecked(!checked);
-    };
-    const onCheckChange = (e) => {
-        console.log("stuff", e.target)
-        console.log("checked", groupChecked)
 
-        setGroupChecked([...groupChecked])
-        checkTaskCompletion(e[0])
-        // setDisabled(true)
-        // setTimeout(function(){ setDisabled(false); }, 500);
-        // checkCompletion();
-        // setChecked(!checked);
-    };
     function onCategorySubmit(event) {
         let savedTasks = {
             "category": "",
@@ -66,12 +69,13 @@ export function CategoryTask(props) {
     function onCategoryTaskChange(checkedValues) {
         setSelectedTasks(checkedValues)
     }
-    const categoryCheckbox = <Checkbox checked={checked} onChange={onCategoryChange} disabled={disabled} />
+    const categoryCheckbox = <Checkbox indeterminate={indeterminate} checked={checkAll} onChange={onCheckAllIndeterminateChange}  />
     const categorySubmit = <Button type="primary" onClick={onCategorySubmit}>Add Tasks</Button>
-    
 
     useEffect(() => {
-        console.log("tasks", taskNames)
+        if(completeTasks.length === taskNames.length){
+            setCheckAll(true)
+        }
         setLoaded(true);
     }, []);
     return (
@@ -81,19 +85,11 @@ export function CategoryTask(props) {
                 <Panel showArrow={false} header={category} key="1" extra={type==="master" ? categorySubmit : categoryCheckbox}>
                     <Row className="task-description">
                         {type==="master" ? <Checkbox.Group options={tasks} value={selectedTasks} onChange={onCategoryTaskChange} /> :
-                            <Checkbox.Group onChange={onCheckChange}>
-                                {taskNames.map((task)=>{
-                                    console.log('tasky', completeTasks)
-                                    if(completeTasks.length !== 0){
-                                        return <Checkbox onChange={onCheckChange} defaultChecked={true}>{task}</Checkbox>
-                                    } else {
-                                        return <Checkbox onChange={onCheckChange}>{task}</Checkbox>
-                                    }
-                                })}
-                            </Checkbox.Group>
-                        // tasks.map((task)=>{
-                        //     return <TaskCheckbox category={category} frequency={frequency} name={task.name} status={task.done}  />
-                        // })
+                            <CheckboxGroup value={checkedList} onChange={onIndeterminateChange} >
+                                {taskNames.map(option =>
+                                    <Checkbox key={option} value={option} onChange={onSingleChange}>{option}</Checkbox>
+                                )}
+                            </CheckboxGroup>
                         }
                     </Row>
                     <Row className="task-description">
