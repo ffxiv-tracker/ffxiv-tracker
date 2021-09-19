@@ -1,11 +1,12 @@
 import React, { useEffect } from 'react';
 import axios from 'axios';
-import { Col, Row, Typography } from 'antd';
+import { Col, Row, Spin, Typography } from 'antd';
 import { CategoryTask } from  './cardTypes';
 const { Title } = Typography;
 
 export default function DailyTasks() {
     const [combinedTasks, setCombinedTasks] = React.useState([]);
+    const {loading, setLoading} = React.useState(true);
 
     function combineTasks(userData, masterData){
         let currentTasks = {}
@@ -27,6 +28,7 @@ export default function DailyTasks() {
             updatedTasks.push(updatedCategory)
         })
         setCombinedTasks(updatedTasks)
+        setLoading(false)
     }
 
     useEffect(() => {
@@ -46,11 +48,13 @@ export default function DailyTasks() {
             const user = await fetchUserData();
             const master = await fetchTaskData();
             combineTasks(user, master);
+
         }
         getData();
     }, []);
 
     return (
+        loading ? <Spin size="large" /> : (
         <div className="tab-space">
             <Title level={3} className="centered task-page">Select items to add to your to-do list</Title>
             <Row className="task-page" justify="center">
@@ -58,19 +62,22 @@ export default function DailyTasks() {
                     <Title level={2} className="centered">Daily Tasks</Title>
                     {combinedTasks.filter(t => t.frequency === 'Daily').map((task, index) => {
                         return (
-                            <CategoryTask key={index} category={task.category} tasks={task.tasks} currentTasks={task.currentTasks} tags={[]} type="master" frequency={task.frequency} />
+                            <CategoryTask key={index} category={task.category} taskNames={task.tasks} completeTasks={task.currentTasks} tags={[]} type="master" frequency={task.frequency} />
                         )
                     })}
                 </Col>
                 <Col span={10} className="ant-col-fix">
                     <Title level={2} className="centered">Weekly Tasks</Title>
                     {combinedTasks.filter(t => t.frequency === 'Weekly').map((task, index) => {
+                        console.log("tasks", task.tasks)
+                        console.log("current", task.currentTasks)
                         return (
-                            <CategoryTask key={index} category={task.category} tasks={task.tasks} currentTasks={task.currentTasks} tags={[]} type="master" frequency={task.frequency} />
+                            <CategoryTask key={index} category={task.category} taskNames={task.tasks} completeTasks={task.currentTasks} tags={[]} type="master" frequency={task.frequency} />
                         )
                     })}
                 </Col>
             </Row>
         </div>
         )
+    )
 }

@@ -1,13 +1,13 @@
 import React, { useEffect } from 'react';
-import { Button, Checkbox, Collapse, Row, Tag } from 'antd';
+import { Button, Checkbox, Collapse, Row, Spin, Tag } from 'antd';
 import { useSaveNewTasksMutation, useUpdateUserTaskMutation } from '../../services/tracker.ts'
 const { Panel } = Collapse;
 const CheckboxGroup = Checkbox.Group;
 
 export function CategoryTask(props) {
-    const { category, frequency, currentTasks, tags, type, tasks, taskNames, completeTasks} = props;
+    const { category, frequency, tags, type, taskNames, completeTasks} = props;
     const [checked, setChecked] = React.useState(completeTasks.length === taskNames.length);
-    const [selectedTasks, setSelectedTasks] = React.useState(currentTasks);
+    const [selectedTasks, setSelectedTasks] = React.useState(completeTasks);
     const [loaded, setLoaded] = React.useState(false);
     const [checkedList, setCheckedList] = React.useState(completeTasks);
     const [indeterminate, setIndeterminate] = React.useState(false);
@@ -33,7 +33,6 @@ export function CategoryTask(props) {
             "task": event.target.value,
             "done": event.target.checked
         };
-        // console.log("task", task)
         updateUserTask(task)
 
     };
@@ -75,6 +74,8 @@ export function CategoryTask(props) {
     useEffect(() => {
         if(completeTasks.length === taskNames.length){
             setCheckAll(true)
+        } else if(completeTasks.length > 0){
+            setIndeterminate(true)
         }
         setLoaded(true);
     }, []);
@@ -84,7 +85,7 @@ export function CategoryTask(props) {
             <Collapse defaultActiveKey={['1']} className={`task-card ${checked ? "checked-collapse" : ""}`}>
                 <Panel showArrow={false} header={category} key="1" extra={type==="master" ? categorySubmit : categoryCheckbox}>
                     <Row className="task-description">
-                        {type==="master" ? <Checkbox.Group options={tasks} value={selectedTasks} onChange={onCategoryTaskChange} /> :
+                        {type==="master" ? <Checkbox.Group options={taskNames} value={selectedTasks} onChange={onCategoryTaskChange} /> :
                             <CheckboxGroup value={checkedList} onChange={onIndeterminateChange} >
                                 {taskNames.map(option =>
                                     <Checkbox key={option} value={option} onChange={onSingleChange}>{option}</Checkbox>
@@ -103,7 +104,7 @@ export function CategoryTask(props) {
                     </Row>
                 </Panel>
             </Collapse>
-        </Row> : null
+        </Row> : <Spin size="large" />
             }
         </div>
     )

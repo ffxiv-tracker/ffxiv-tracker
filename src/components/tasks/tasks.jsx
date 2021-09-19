@@ -30,12 +30,12 @@ export default function TasksPage() {
         setVisible(false);
     };
     const onFinish = values => {
-        console.log("data", values)
-        const customTasks = data.reduce(function (newArr, task) {
+        let customTasks = data.reduce(function (newArr, task) {
             if (task.category === 'Custom') {
                 task.tasks.map((subtask)=>{
                     newArr.push(subtask.name);
                 })
+                return task
             }
             return newArr;
         }, []);
@@ -45,14 +45,13 @@ export default function TasksPage() {
             "frequency": values.frequency,
             "tasks": customTasks
         }
-        console.log("values", newTask)
-        newUserTask(newTask)
+        console.log('task', customTasks)
+        // newUserTask(newTask)
         form.setFieldsValue({
             task: '',
             category: ''
         });
         setVisible(false);
-
     };
 
     return (
@@ -66,11 +65,6 @@ export default function TasksPage() {
                 <Row className="task-page" justify="center">
                     <Col span={10} className="ant-col-fix">
                         <Title level={2} className="centered">Daily Tasks</Title>
-                        {/* {data.filter(t => t.frequency === 'Daily').map((task, index) => {
-                            return (
-                                <CategoryTask key={index} category={task.category} tasks={task.tasks} tags={[]} frequency="Daily" type="" />
-                            )
-                        })} */}
                         {data.filter(t => t.frequency === 'Daily').map((task, index) => {
                             let names = []
                             let done = []
@@ -79,10 +73,10 @@ export default function TasksPage() {
                                 if(task.done === true){
                                     done.push(task.name)
                                 }
+                                return task
                             })
-                            console.log("done", done)
                             return (
-                                <CategoryTask key={index} category={task.category} tasks={task.tasks} taskNames={names} completeTasks={done} tags={[]} frequency="Daily" type="" />
+                                <CategoryTask key={index} category={task.category} taskNames={names} completeTasks={done} tags={[]} frequency="Daily" type="" />
                             )
                         })}
                     </Col>
@@ -96,8 +90,8 @@ export default function TasksPage() {
                                 if(task.done === true){
                                     done.push(task.name)
                                 }
+                                return task
                             })
-                            console.log("done", done)
                             return (
                                 <CategoryTask key={index} category={task.category} tasks={task.tasks} taskNames={names} completeTasks={done} tags={[]} frequency="Weekly" type="" />
                             )
