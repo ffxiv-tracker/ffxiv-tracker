@@ -1,14 +1,15 @@
 import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react'
+import {Category, MasterCategory} from "./types";
 
 // Define a service using a base URL and expected endpoints
 export const trackerApi = createApi({
     reducerPath: 'trackerApi',
     baseQuery: fetchBaseQuery({ baseUrl: 'https://hdnss8awo4.execute-api.us-west-2.amazonaws.com/' }),
     endpoints: (builder) => ({
-        getMasterTasks: builder.query({
+        getMasterTasks: builder.query<MasterCategory[], void>({
             query: () => `tasks`,
         }),
-        getUserTasks: builder.query({
+        getUserTasks: builder.query<Category[], void>({
             query: () => `user/tasks`,
         }),
         saveNewTasks: builder.mutation({
