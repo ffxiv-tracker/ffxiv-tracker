@@ -34,6 +34,7 @@ export default function TasksPage() {
             if (task.category === 'Custom') {
                 task.tasks.map((subtask)=>{
                     newArr.push(subtask.name);
+                    return null
                 })
                 return newArr
             }

@@ -82,7 +82,7 @@ export function CategoryTask(props) {
     return (
         <div className="tab-space">
             {loaded ? <Row justify="space-between" align="middle">
-            <Collapse defaultActiveKey={['1']} className={`task-card ${checked ? "checked-collapse" : ""}`}>
+            <Collapse defaultActiveKey={['1']} className={`task-card ${checked && type!=="master" ? "checked-collapse" : ""}`}>
                 <Panel showArrow={false} header={category} key="1" extra={type==="master" ? categorySubmit : categoryCheckbox}>
                     <Row className="task-description">
                         {type==="master" ? <Checkbox.Group options={taskNames} value={selectedTasks} onChange={onCategoryTaskChange} /> :

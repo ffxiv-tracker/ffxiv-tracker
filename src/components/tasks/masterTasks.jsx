@@ -17,8 +17,10 @@ export default function DailyTasks() {
             currentTaskCategories.push(task.category)
             task.tasks.map((names)=>{
                 parsedTasks.push(names.name)
+                return null
             })
             currentTasks[task.category] = parsedTasks
+            return null
         })
         masterData.map((task)=>{
             let updatedCategory = {
@@ -29,6 +31,7 @@ export default function DailyTasks() {
                 updatedCategory.currentTasks = currentTasks[task.category]
             }
             updatedTasks.push(updatedCategory)
+            return null
         })
         setCombinedTasks(updatedTasks)
         setLoading(false)
