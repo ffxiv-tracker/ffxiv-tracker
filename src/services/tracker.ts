@@ -4,12 +4,15 @@ import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react'
 export const trackerApi = createApi({
     reducerPath: 'trackerApi',
     baseQuery: fetchBaseQuery({ baseUrl: 'https://hdnss8awo4.execute-api.us-west-2.amazonaws.com/' }),
+    tagTypes: ['Task'],
     endpoints: (builder) => ({
         getMasterTasks: builder.query({
             query: () => `tasks`,
         }),
         getUserTasks: builder.query({
             query: () => `user/tasks`,
+            providesTags: ['Task']
+
         }),
         saveNewTasks: builder.mutation({
             query: (body) =>{
@@ -18,7 +21,8 @@ export const trackerApi = createApi({
                     method: 'POST',
                     body,
                 }
-            }
+            },
+            invalidatesTags: ['Task']
         }),
         updateUserTask: builder.mutation({
             query: (body) =>{

@@ -30,12 +30,12 @@ export default function TasksPage() {
         setVisible(false);
     };
     const onFinish = values => {
-        let customTasks = data.reduce(function (newArr, task) {
+        let customTasks = data.filter(t => t.frequency === values.frequency).reduce(function (newArr, task) {
             if (task.category === 'Custom') {
                 task.tasks.map((subtask)=>{
                     newArr.push(subtask.name);
                 })
-                return task
+                return newArr
             }
             return newArr;
         }, []);
@@ -45,8 +45,7 @@ export default function TasksPage() {
             "frequency": values.frequency,
             "tasks": customTasks
         }
-        console.log('task', customTasks)
-        // newUserTask(newTask)
+        newUserTask(newTask)
         form.setFieldsValue({
             task: '',
             category: ''
