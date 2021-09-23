@@ -2,7 +2,6 @@ import { Route, Switch } from 'react-router-dom';
 import Header from './components/header';
 import Links from './components/links';
 import Home from './components/home';
-import Login from './components/login';
 import Tasks from './components/tasks/tasks';
 import ProtectedRoute from './components/protectedRoute';
 import MasterTasks from './components/tasks/masterTasks';

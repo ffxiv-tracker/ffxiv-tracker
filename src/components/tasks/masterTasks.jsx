@@ -1,86 +1,149 @@
-import React, { useEffect } from 'react';
-import axios from 'axios';
-import { Col, Row, Spin, Typography } from 'antd';
+import React from 'react';
+import { Alert, Button, Col, Form, Input, Modal, Row, Select, Spin, Typography } from 'antd';
 import { CategoryTask } from  './cardTypes';
+import { useGetMasterTasksQuery, useSaveNewTasksMutation } from '../../services/tracker.ts'
 const { Title } = Typography;
+const { Option } = Select;
 
 export default function DailyTasks() {
-    const [combinedTasks, setCombinedTasks] = React.useState([]);
-    const [loading, setLoading] = React.useState(true);
+    const {data, isLoading} = useGetMasterTasksQuery();
+    const [visible, setVisible] = React.useState(false);
+    const [customAlertVisible, setCustomAlertVisible] = React.useState(false);
+    const [newUserTask] = useSaveNewTasksMutation();
+    const [form] = Form.useForm();
+    const layout = {
+        labelCol: { span: 8 },
+        wrapperCol: { span: 16 },
+    };
+    const tailLayout = {
+        wrapperCol: { offset: 8, span: 16 },
+    };
 
-    function combineTasks(userData, masterData){
-        let currentTasks = {}
-        const currentTaskCategories = []
-        let updatedTasks = []
-        userData.map((task)=>{
-            let parsedTasks = []
-            currentTaskCategories.push(task.category)
-            task.tasks.map((names)=>{
-                parsedTasks.push(names.name)
-                return null
-            })
-            currentTasks[task.category] = parsedTasks
-            return null
-        })
-        masterData.map((task)=>{
-            let updatedCategory = {
-                ...task,
-                currentTasks: []
+    const showModal = () => {
+        setVisible(true);
+    };
+
+    const showAlert= () => {
+        setCustomAlertVisible(true);
+        setTimeout(() => {setCustomAlertVisible(false);}, 3000);
+    };
+
+    const handleCancel = () => {
+        form.setFieldsValue({
+            task: '',
+            description: ''
+        });
+        setVisible(false);
+    };
+    const onFinish = values => {
+        let customTasks = data.filter(t => t.frequency === values.frequency).reduce(function (newArr, task) {
+            if (task.category === 'Custom') {
+                task.tasks.map((subtask)=>{
+                    newArr.push(subtask.name);
+                    return null
+                })
+                return newArr
             }
-            if(currentTaskCategories.includes(task.category)){
-                updatedCategory.currentTasks = currentTasks[task.category]
-            }
-            updatedTasks.push(updatedCategory)
-            return null
-        })
-        setCombinedTasks(updatedTasks)
-        setLoading(false)
-    }
-
-    useEffect(() => {
-        async function getData(){
-            const fetchUserData = async () => {
-                const userResults = await axios(
-                    'https://hdnss8awo4.execute-api.us-west-2.amazonaws.com/user/tasks',
-                );
-                return userResults.data;
-            };
-            const fetchTaskData = async () => {
-                const result = await axios(
-                    'https://hdnss8awo4.execute-api.us-west-2.amazonaws.com/tasks',
-                );
-                return result.data;
-            };
-            const user = await fetchUserData();
-            const master = await fetchTaskData();
-            combineTasks(user, master);
-
+            return newArr;
+        }, []);
+        customTasks.push(values.task)
+        const newTask = {
+            "category": "Custom",
+            "frequency": values.frequency,
+            "tasks": customTasks
         }
-        getData();
-    }, []);
+        newUserTask(newTask)
+        form.setFieldsValue({
+            task: '',
+            category: ''
+        });
+        setVisible(false);
+        showAlert();
+    };
 
     return (
-        loading ? <Spin size="large" /> : (
+        isLoading ? <Spin size="large" /> : (
         <div className="tab-space">
+            <Row className="task-button" justify="center">
+                <Button onClick={showModal} size="large">
+                    + Add New Task
+                </Button>
+            </Row>
             <Title level={3} className="centered task-page">Select items to add to your to-do list</Title>
+            {customAlertVisible ? <Alert message="Custom task successfully added" type="success" showIcon /> : null
+            }
             <Row className="task-page" justify="center">
                 <Col span={10} className="ant-col-fix">
                     <Title level={2} className="centered">Daily Tasks</Title>
-                    {combinedTasks.filter(t => t.frequency === 'Daily').map((task, index) => {
-                        return (
-                            <CategoryTask key={index} category={task.category} taskNames={task.tasks} completeTasks={task.currentTasks} tags={[]} type="master" frequency={task.frequency} />
-                        )
-                    })}
+                    {data.filter(t => t.frequency === 'Daily').map((task, index) => {
+                            let names = []
+                            let selected = []
+                            task.tasks.map((task)=>{
+                                names.push(task.name)
+                                if(task.selected === true){
+                                    selected.push(task.name)
+                                }
+                                return task
+                            })
+                            return (
+                                <CategoryTask key={index} category={task.category} taskNames={names} completeTasks={selected} tags={[]} frequency="Daily" type="master" />
+                            )
+                        })}
                 </Col>
                 <Col span={10} className="ant-col-fix">
                     <Title level={2} className="centered">Weekly Tasks</Title>
-                    {combinedTasks.filter(t => t.frequency === 'Weekly').map((task, index) => {
-                        return (
-                            <CategoryTask key={index} category={task.category} taskNames={task.tasks} completeTasks={task.currentTasks} tags={[]} type="master" frequency={task.frequency} />
-                        )
-                    })}
+                    {data.filter(t => t.frequency === 'Weekly').map((task, index) => {
+                            let names = []
+                            let selected = []
+                            task.tasks.map((task)=>{
+                                names.push(task.name)
+                                if(task.selected === true){
+                                    selected.push(task.name)
+                                }
+                                return task
+                            })
+                            return (
+                                <CategoryTask key={index} category={task.category} tasks={task.tasks} taskNames={names} completeTasks={selected} tags={[]} frequency="Weekly" type="master" />
+                            )
+                        })}
                 </Col>
             </Row>
+            <Modal
+                    title="Add a New Task"
+                    visible={visible}
+                    onCancel={handleCancel}
+                    footer={null}
+                >
+                    <Form
+                        {...layout}
+                        name="tasks"
+                        form={form}
+                        onFinish={onFinish}
+                    >
+                        <Form.Item
+                            label="Task Name"
+                            name="task"
+                            rules={[{ required: true, message: 'Please input your task!' }]}
+                        >
+                            <Input />
+                        </Form.Item>
+                        <Form.Item
+                            label="Task Frequency"
+                            name="frequency"
+                            rules={[{ required: true, message: 'Please select your task frequency!' }]}
+                        >
+                            <Select placeholder="Select your task frequency">
+                                <Option value="Daily">Daily</Option>
+                                <Option value="Weekly">Weekly</Option>
+                            </Select>
+                        </Form.Item>
+                        <Form.Item {...tailLayout}>
+                            <Button type="primary" htmlType="submit">
+                                Submit
+                            </Button>
+                        </Form.Item>
+                    </Form>
+                </Modal>
         </div>
         )
     )

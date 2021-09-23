@@ -30,6 +30,7 @@ export const trackerApi = createApi({
         }),
         getMasterTasks: builder.query({
             query: () => `tasks`,
+            providesTags: ['Task']
         }),
         getUserTasks: builder.query({
             query: () => `user/tasks`,
