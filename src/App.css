@@ -1,11 +1,11 @@
 @import '~antd/dist/antd.dark.css';
 
 [data-theme='compact'] .ant-drawer-body p {
-  margin-bottom: 0;
+    margin-bottom: 0;
 }
 .gutter-row {
     padding: 8px 0;
-  }
+}
 .margin-auto {
     margin:auto;
 }
@@ -32,6 +32,10 @@
     margin: 0;
     padding-top: 2%;
 }
+.collapse-card-title {
+    font-weight: bold;
+    font-size: larger;
+}
 .checked-collapse {
     background-color: #030852;
     text-decoration: line-through;
@@ -48,4 +52,35 @@
 }
 .ant-col-fix {
     padding: 12px;
+}
+
+/* Checkbox Classes */
+.checkbox-group {
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+}
+.checkbox-block {
+    display: flex;
+    align-items: center;
+    flex-direction: column;
+    padding: 1%;
+}
+.checkbox-image {
+    max-width: 64px;
+}
+.checkbox-label {
+    padding: 2%;
+    font-weight: normal;
+}
+
+/* Splash CSS */
+.splash-box {
+    padding-top: 10%;
+}
+
+.header {
+    display: flex;
+    justify-content: center;
+    align-items: center;
 }
