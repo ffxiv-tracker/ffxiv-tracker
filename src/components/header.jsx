@@ -25,22 +25,12 @@ export default class NavDrawer extends React.Component {
             <div>
                 <Layout>
                     <Header className="header">
-                        <Button onClick={this.showDrawer}><MenuOutlined /></Button>
+                        <h2><Link to="/">Home</Link></h2>
+                        <h2><Link to="/links">Links</Link></h2>
+                        <h2><Link to="/tasks">Tasks</Link></h2>
+                        <h2><Link to="/master-tasks">Master Tasks</Link></h2>
                     </Header>
                 </Layout>
-                <Drawer
-                    title="Basic Drawer"
-                    placement={"left"}
-                    closable={false}
-                    onClose={this.onClose}
-                    visible={visible}
-                    key={"left"}
-                >
-                    <p><Link to="/">Home</Link></p>
-                    <p><Link to="/links">Links</Link></p>
-                    <p><Link to="/tasks">Tasks</Link></p>
-                    <p><Link to="/master-tasks">Master Tasks</Link></p>
-                </Drawer>
             </div>
 
         );

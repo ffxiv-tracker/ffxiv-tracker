@@ -1,5 +1,5 @@
 import React, { useEffect } from 'react';
-import { Alert, Button, Checkbox, Collapse, Row, Spin, Tag } from 'antd';
+import { Alert, Button, Checkbox, Col, Collapse, Image, Row, Spin, Tag } from 'antd';
 import { useSaveNewTasksMutation, useUpdateUserTaskMutation } from '../../services/tracker.ts'
 const { Panel } = Collapse;
 const CheckboxGroup = Checkbox.Group;
@@ -91,25 +91,28 @@ export function CategoryTask(props) {
             {masterAlertVisible ? <Alert message="Master tasks successfully updated" type="success" showIcon /> : null}
             {loaded ? <Row justify="space-between" align="middle">
             <Collapse defaultActiveKey={['1']} className={`task-card ${checked && type!=="master" ? "checked-collapse" : ""}`}>
-                <Panel showArrow={false} header={category} key="1" extra={type==="master" ? categorySubmit : categoryCheckbox}>
-                    <Row className="task-description">
+                <Panel className="collapse-card-title" showArrow={false} header={category} key="1" extra={type==="master" ? categorySubmit : categoryCheckbox}>
+                    <Row>
                         {type==="master" ? <Checkbox.Group options={taskNames} value={selectedTasks} onChange={onCategoryTaskChange} /> :
-                            <CheckboxGroup value={checkedList} onChange={onIndeterminateChange} >
+                            <CheckboxGroup value={checkedList} onChange={onIndeterminateChange} className="checkbox-group" >
                                 {taskNames.map(option =>
-                                    <Checkbox key={option} value={option} onChange={onSingleChange}>{option}</Checkbox>
+                                    <Col span={4} className="checkbox-block">
+                                            {/* <img className="checkbox-image" src={`/images/${option}.png` ? `/images/${option}.png` : "https://xivapi.com/i/071000/071241.png"} /> */}
+                                            <img className="checkbox-image"  src={`/images/${option}.png`} onError={(e)=>{e.target.onError = null; e.target.src = "/images/default.png"}}/>
+                                            <Checkbox className="checkbox-label" key={option} value={option} onChange={onSingleChange}>{option}</Checkbox>
+                                    </Col>
                                 )}
                             </CheckboxGroup>
                         }
                     </Row>
-                    <Row className="task-description">
-                    </Row>
-                    <Row className="tag-space">
+                    {/* Commented out but saved in case we decide to introduce tagging */}
+                    {/* <Row className="tag-space">
                         {tags.map((tagValue)=>{
                             return (
                                 <Tag>{tagValue}</Tag>
                             )
                         })}
-                    </Row>
+                    </Row> */}
                 </Panel>
             </Collapse>
         </Row> : <Spin size="large" />
