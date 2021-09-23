@@ -1,5 +1,5 @@
 import React, { useEffect } from 'react';
-import { Button, Checkbox, Collapse, Row, Spin, Tag } from 'antd';
+import { Alert, Button, Checkbox, Collapse, Row, Spin, Tag } from 'antd';
 import { useSaveNewTasksMutation, useUpdateUserTaskMutation } from '../../services/tracker.ts'
 const { Panel } = Collapse;
 const CheckboxGroup = Checkbox.Group;
@@ -11,6 +11,7 @@ export function CategoryTask(props) {
     const [loaded, setLoaded] = React.useState(false);
     const [checkedList, setCheckedList] = React.useState(completeTasks);
     const [indeterminate, setIndeterminate] = React.useState(false);
+    const [masterAlertVisible, setMasterAlertVisible] = React.useState(false);
     const [checkAll, setCheckAll] = React.useState(false);
     const [updateUserTask] = useUpdateUserTaskMutation();
     const [newUserTask] = useSaveNewTasksMutation();
@@ -63,11 +64,17 @@ export function CategoryTask(props) {
         savedTasks.category = category
         savedTasks.tasks = selectedTasks
         event.stopPropagation();
-        newUserTask(savedTasks)
+        newUserTask(savedTasks);
+        showAlert();
     }
     function onCategoryTaskChange(checkedValues) {
         setSelectedTasks(checkedValues)
     }
+
+    const showAlert= () => {
+        setMasterAlertVisible(true);
+        setTimeout(() => {setMasterAlertVisible(false);}, 3000);
+    };
     const categoryCheckbox = <Checkbox indeterminate={indeterminate} checked={checkAll} onChange={onCheckAllIndeterminateChange}  />
     const categorySubmit = <Button type="primary" onClick={onCategorySubmit}>Add Tasks</Button>
 
@@ -81,6 +88,7 @@ export function CategoryTask(props) {
     }, []);
     return (
         <div className="tab-space">
+            {masterAlertVisible ? <Alert message="Master tasks successfully updated" type="success" showIcon /> : null}
             {loaded ? <Row justify="space-between" align="middle">
             <Collapse defaultActiveKey={['1']} className={`task-card ${checked && type!=="master" ? "checked-collapse" : ""}`}>
                 <Panel showArrow={false} header={category} key="1" extra={type==="master" ? categorySubmit : categoryCheckbox}>

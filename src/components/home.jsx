@@ -33,8 +33,5 @@ export default function Home() {
         }
     }, []);
 
-
-    console.log('auth', authed)
-
     return authed ? (<Redirect to={{pathname:"/tasks"}}/>) : (<Login/>);
 }
