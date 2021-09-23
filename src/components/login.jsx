@@ -1,6 +1,6 @@
 import { Button, Row, Col} from 'antd';
 
-export default function SplashPage() {
+export default function Login() {
     return (
         <div className="container link-page">
             <Row justify="space-around">
