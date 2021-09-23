@@ -29,8 +29,22 @@ export default function Home() {
                 const jwt = fulfilled.jwt
                 localStorage.setItem("isAuthenticated", "true");
                 localStorage.setItem("jwt", jwt);
+
+                return (
+                    <Redirect
+                        to={{
+                            pathname: "/tasks",
+                        }}
+                    />
+                );
             })
-            .catch(rejected => console.error(rejected))
+            .catch(rejected => {
+                console.error(rejected)
+
+                return (
+                    <pre>Auth failed: ${rejected.toString()}</pre>
+                )
+            });
         }
     } else {
         return (
