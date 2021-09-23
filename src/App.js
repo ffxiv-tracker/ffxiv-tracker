@@ -1,8 +1,9 @@
 import { Route, Switch } from 'react-router-dom';
 import Header from './components/header';
 import Links from './components/links';
-import Splash from './components/splash';
+import Home from './components/home';
 import Tasks from './components/tasks/tasks';
+import ProtectedRoute from './components/protectedRoute';
 import MasterTasks from './components/tasks/masterTasks';
 import './App.css';
 
@@ -12,10 +13,10 @@ function App() {
             <Header />
             <main>
                 <Switch>
-                    <Route path="/" exact component={Splash} />
+                    <Route path="/" exact component={Home} />
                     <Route path="/links" component={Links} />
-                    <Route path="/tasks" component={Tasks} />
-                    <Route path="/master-tasks" component={MasterTasks} />
+                    <ProtectedRoute path="/tasks" component={Tasks} />
+                    <ProtectedRoute path="/master-tasks" component={MasterTasks} />
                 </Switch>
             </main>
         </div>
