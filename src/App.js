@@ -15,7 +15,6 @@ function App() {
             <main>
                 <Switch>
                     <Route path="/" exact component={Home} />
-                    {/* <Route path="/login" exact component={Login} /> */}
                     <Route path="/links" component={Links} />
                     <ProtectedRoute path="/tasks" component={Tasks} />
                     <ProtectedRoute path="/master-tasks" component={MasterTasks} />
