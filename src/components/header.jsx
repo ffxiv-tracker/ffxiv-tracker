@@ -1,7 +1,6 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
-import { Layout, Drawer, Button } from 'antd';
-import { MenuOutlined } from '@ant-design/icons';
+import { Layout } from 'antd';
 
 const { Header } = Layout;
 
@@ -20,15 +19,15 @@ export default class NavDrawer extends React.Component {
         });
     };
     render() {
-        const { visible } = this.state;
         return (
             <div>
                 <Layout>
                     <Header className="header">
-                        <h2><Link to="/">Home</Link></h2>
-                        <h2><Link to="/links">Links</Link></h2>
-                        <h2><Link to="/tasks">Tasks</Link></h2>
-                        <h2><Link to="/master-tasks">Master Tasks</Link></h2>
+                        <img className="logo" src={`/images/tomestone-cropped.png`}/>
+                        <h2><Link className="header-text" to="/">Home</Link></h2>
+                        <h2><Link className="header-text" to="/links">Links</Link></h2>
+                        <h2><Link className="header-text" to="/tasks">Tasks</Link></h2>
+                        <h2><Link className="header-text" to="/master-tasks">Master Tasks</Link></h2>
                     </Header>
                 </Layout>
             </div>

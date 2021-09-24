@@ -1,10 +1,12 @@
 import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react'
 
+export const apiBaseUrl = 'https://tasks-api.tomestone.dev/';
+
 // Define a service using a base URL and expected endpoints
 export const trackerApi = createApi({
     reducerPath: 'trackerApi',
     baseQuery: fetchBaseQuery({
-        baseUrl: 'https://tasks-api.tomestone.dev/',
+        baseUrl: apiBaseUrl,
         prepareHeaders: (headers) => {
             // By default, if we have a token in the store, let's use that for authenticated requests
             const token = localStorage.getItem("jwt")

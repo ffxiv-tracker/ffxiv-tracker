@@ -97,8 +97,7 @@ export function CategoryTask(props) {
                             <CheckboxGroup value={checkedList} onChange={onIndeterminateChange} className="checkbox-group" >
                                 {taskNames.map(option =>
                                     <Col span={4} className="checkbox-block">
-                                            {/* <img className="checkbox-image" src={`/images/${option}.png` ? `/images/${option}.png` : "https://xivapi.com/i/071000/071241.png"} /> */}
-                                            <img className="checkbox-image"  src={`/images/${option}.png`} onError={(e)=>{e.target.onError = null; e.target.src = "/images/default.png"}}/>
+                                            <img className="checkbox-image"  src={`/images/${option}.png`} onError={(e)=>{e.target.onError = null; e.target.src = "/images/default.png"}} alt="Checkbox" />
                                             <Checkbox className="checkbox-label" key={option} value={option} onChange={onSingleChange}>{option}</Checkbox>
                                     </Col>
                                 )}
