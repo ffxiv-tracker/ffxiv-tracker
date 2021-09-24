@@ -13,7 +13,7 @@ export default function NavHeader () {
             <Layout>
                 <Header className="header">
                     <Row className="header-row">
-                        <Col className="logo-block" span={8}><img className="logo" src={`/images/tomestone-cropped.png`}/></Col>
+                        <Col className="logo-block" span={8}><img className="logo" src={`/images/tomestone-cropped.png`} alt="Logo" /></Col>
                                 <Col className="menu-text" span={2}><h2><Link className="header-text" to="/">Home</Link></h2></Col>
                                 <Col className="menu-text" span={2}><h2><Link className="header-text" to="/links">Links</Link></h2></Col>
                                 <Col className="menu-text" span={2}><h2><Link className="header-text" to="/tasks">Tasks</Link></h2></Col>
