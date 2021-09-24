@@ -102,7 +102,7 @@
 }
 .avatar-block {
     align-items: center;
-    justify-content: end;
+    justify-content: flex-end;
     display: flex;
     height: 100%;
 }
