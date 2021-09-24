@@ -33,9 +33,7 @@ export class PipelineStack extends cdk.Stack {
       synthAction: pipelines.SimpleSynthAction.standardNpmSynth({
         sourceArtifact,
         cloudAssemblyArtifact,
-        environment: {
-          privileged: true, // so that we can use Docker bundling
-        },
+        buildCommand: 'npm run build',
       }),
     });
   }
