@@ -5,10 +5,8 @@ import {
 import { useExchangeMutation } from '../services/tracker.ts'
 import Login from "./login";
 
-
 export default function Home() {
     const [authed, setAuthed] = useState(!!localStorage.getItem("isAuthenticated"))
-
     const params = new URLSearchParams(window.location.search);
     const code = params.get('code');
     const codeBody = {code}
