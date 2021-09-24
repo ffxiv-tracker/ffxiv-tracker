@@ -51,7 +51,7 @@ export class FrontEndStack extends Stack {
             sources: [deploy.Source.asset("./build")],
             destinationBucket: siteBucket,
             distribution: siteDistribution,
-            distributionPaths: ["/*"]
+            distributionPaths: ["/index.html"]
         });
     }
 }
