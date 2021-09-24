@@ -1,8 +1,8 @@
 import React from 'react';
 import { Alert, Button, Col, Form, Input, Modal, Row, Select, Spin, Typography } from 'antd';
+import { Box, Flex, Heading, Spacer, Spinner } from "@chakra-ui/react"
 import { CategoryTask } from  './cardTypes';
 import { useGetMasterTasksQuery, useSaveNewTasksMutation } from '../../services/tracker.ts'
-const { Title } = Typography;
 const { Option } = Select;
 
 export default function DailyTasks() {
@@ -62,52 +62,57 @@ export default function DailyTasks() {
     };
 
     return (
-        isLoading ? <Spin size="large" /> : (
-        <div className="tab-space">
-            <Row className="task-button" justify="center">
-                <Button onClick={showModal} size="large">
+        isLoading ? <Spinner size="xl" /> : (
+        <Box>
+            <Box className="task-page" justify="center">
+                <Heading>Select items to add to your to-do list</Heading>
+                <Button className="task-button" onClick={showModal} size="large">
                     + Add New Task
                 </Button>
-            </Row>
-            <Title level={3} className="centered task-page">Select items to add to your to-do list</Title>
+            </Box>
             {customAlertVisible ? <Alert message="Custom task successfully added" type="success" showIcon /> : null
             }
-            <Row className="task-page" justify="center">
-                <Col span={10} className="ant-col-fix">
-                    <Title level={2} className="centered">Daily Tasks</Title>
-                    {data.filter(t => t.frequency === 'Daily').map((task, index) => {
-                            let names = []
-                            let selected = []
-                            task.tasks.map((task)=>{
-                                names.push(task.name)
-                                if(task.selected === true){
-                                    selected.push(task.name)
-                                }
-                                return task
-                            })
-                            return (
-                                <CategoryTask key={index} category={task.category} taskNames={names} completeTasks={selected} tags={[]} frequency="Daily" type="master" />
-                            )
-                        })}
-                </Col>
-                <Col span={10} className="ant-col-fix">
-                    <Title level={2} className="centered">Weekly Tasks</Title>
-                    {data.filter(t => t.frequency === 'Weekly').map((task, index) => {
-                            let names = []
-                            let selected = []
-                            task.tasks.map((task)=>{
-                                names.push(task.name)
-                                if(task.selected === true){
-                                    selected.push(task.name)
-                                }
-                                return task
-                            })
-                            return (
-                                <CategoryTask key={index} category={task.category} tasks={task.tasks} taskNames={names} completeTasks={selected} tags={[]} frequency="Weekly" type="master" />
-                            )
-                        })}
-                </Col>
-            </Row>
+            <Box className="" justify="center">
+                <Flex>
+                    <Spacer />
+                    <Box span={10} className="ant-col-fix">
+                        <Heading className="centered">Daily Tasks</Heading>
+                        {data.filter(t => t.frequency === 'Daily').map((task, index) => {
+                                let names = []
+                                let selected = []
+                                task.tasks.map((task)=>{
+                                    names.push(task.name)
+                                    if(task.selected === true){
+                                        selected.push(task.name)
+                                    }
+                                    return task
+                                })
+                                return (
+                                    <CategoryTask key={index} category={task.category} taskNames={names} completeTasks={selected} tags={[]} frequency="Daily" type="master" />
+                                )
+                            })}
+                    </Box>
+                    <Spacer />
+                    <Box span={10} className="ant-col-fix">
+                        <Heading className="centered">Weekly Tasks</Heading>
+                        {data.filter(t => t.frequency === 'Weekly').map((task, index) => {
+                                let names = []
+                                let selected = []
+                                task.tasks.map((task)=>{
+                                    names.push(task.name)
+                                    if(task.selected === true){
+                                        selected.push(task.name)
+                                    }
+                                    return task
+                                })
+                                return (
+                                    <CategoryTask key={index} category={task.category} tasks={task.tasks} taskNames={names} completeTasks={selected} tags={[]} frequency="Weekly" type="master" />
+                                )
+                            })}
+                    </Box>
+                    <Spacer />
+                </Flex>
+            </Box>
             <Modal
                     title="Add a New Task"
                     visible={visible}
@@ -144,7 +149,7 @@ export default function DailyTasks() {
                         </Form.Item>
                     </Form>
                 </Modal>
-        </div>
+        </Box>
         )
     )
 }
