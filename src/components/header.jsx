@@ -7,7 +7,10 @@ const { Header } = Layout;
 
 export default function NavHeader () {
     const jwt = localStorage.getItem("jwt")
-    var decodedValue = jwt_decode(jwt);
+    let decodedValue
+    if(jwt){
+        decodedValue = jwt_decode(jwt);
+    }
     return (
         <div>
             <Layout>
@@ -18,10 +21,10 @@ export default function NavHeader () {
                                 <Col className="menu-text" span={2}><h2><Link className="header-text" to="/links">Links</Link></h2></Col>
                                 <Col className="menu-text" span={2}><h2><Link className="header-text" to="/tasks">Tasks</Link></h2></Col>
                                 <Col className="menu-text" span={2}><h2><Link className="header-text" to="/master-tasks">Master Tasks</Link></h2></Col>
-                        <Col className="avatar-block" span={8}>
+                        {jwt ? <Col className="avatar-block" span={8}>
                             <h3 className ="avatar-username">{decodedValue.username}</h3>
                             <Avatar size={48} src={`https://cdn.discordapp.com/avatars/${decodedValue.id}/${decodedValue.avatar}.png`} />
-                        </Col>
+                        </Col> : null}
                     </Row>
                 </Header>
             </Layout>
