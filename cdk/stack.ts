@@ -12,10 +12,12 @@ import {
 } from 'aws-cdk-lib';
 import {Construct} from "constructs";
 
-const WEB_APP_DOMAIN = "tasks.tomestone.dev"
+interface FrontEndStackProps extends StackProps {
+    domain: string;
+}
 
 export class FrontEndStack extends Stack {
-    constructor(scope: Construct, id: string, props?: StackProps) {
+    constructor(scope: Construct, id: string, props: FrontEndStackProps) {
         super(scope, id, props);
 
         const zone = route53.HostedZone.fromHostedZoneAttributes(this, "Zone", {
@@ -24,7 +26,7 @@ export class FrontEndStack extends Stack {
         });
 
         const siteBucket = new s3.Bucket(this, "SiteBucket", {
-            bucketName: WEB_APP_DOMAIN,
+            bucketName: props.domain,
             websiteIndexDocument: 'index.html',
             websiteErrorDocument: 'index.html',
             publicReadAccess: true,
@@ -37,12 +39,12 @@ export class FrontEndStack extends Stack {
         //Create CloudFront Distribution
         const siteDistribution = new cloudfront.Distribution(this, 'SiteDistribution', {
             defaultBehavior: {origin: new origins.S3Origin(siteBucket)},
-            domainNames: [WEB_APP_DOMAIN],
+            domainNames: [props.domain],
             certificate: siteCertificate,
         });
 
         new route53.ARecord(this, "SiteRecord", {
-            recordName: WEB_APP_DOMAIN,
+            recordName: props.domain,
             target: route53.RecordTarget.fromAlias(new targets.CloudFrontTarget(siteDistribution)),
             zone
         });
