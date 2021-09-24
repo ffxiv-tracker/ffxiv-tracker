@@ -1,5 +1,5 @@
 import React, { useEffect } from 'react';
-import { Alert, Button, Checkbox, Col, Collapse, Image, Row, Spin, Tag } from 'antd';
+import { Alert, Button, Checkbox, Col, Collapse, Row, Spin} from 'antd';
 import { useSaveNewTasksMutation, useUpdateUserTaskMutation } from '../../services/tracker.ts'
 const { Panel } = Collapse;
 const CheckboxGroup = Checkbox.Group;
