@@ -1,17 +1,16 @@
 import React, { useEffect } from 'react';
-import { Alert, Button, Checkbox, Col, Collapse, Row, Spin} from 'antd';
+import { Checkbox } from 'antd';
+import { Accordion, AccordionItem, AccordionButton, AccordionPanel, Box, Center, Flex, Heading} from "@chakra-ui/react"
 import { useSaveNewTasksMutation, useUpdateUserTaskMutation } from '../../services/tracker.ts'
-const { Panel } = Collapse;
 const CheckboxGroup = Checkbox.Group;
 
 export function CategoryTask(props) {
-    const { category, frequency, tags, type, taskNames, completeTasks} = props;
+    const { category, frequency, showAlert, type, taskNames, completeTasks} = props;
     const [checked, setChecked] = React.useState(completeTasks.length === taskNames.length);
     const [selectedTasks, setSelectedTasks] = React.useState(completeTasks);
     const [loaded, setLoaded] = React.useState(false);
     const [checkedList, setCheckedList] = React.useState(completeTasks);
     const [indeterminate, setIndeterminate] = React.useState(false);
-    const [masterAlertVisible, setMasterAlertVisible] = React.useState(false);
     const [checkAll, setCheckAll] = React.useState(false);
     const [updateUserTask] = useUpdateUserTaskMutation();
     const [newUserTask] = useSaveNewTasksMutation();
@@ -65,18 +64,13 @@ export function CategoryTask(props) {
         savedTasks.tasks = selectedTasks
         event.stopPropagation();
         newUserTask(savedTasks);
-        showAlert();
+        showAlert("add");
     }
     function onCategoryTaskChange(checkedValues) {
         setSelectedTasks(checkedValues)
     }
-
-    const showAlert= () => {
-        setMasterAlertVisible(true);
-        setTimeout(() => {setMasterAlertVisible(false);}, 3000);
-    };
-    const categoryCheckbox = <Checkbox indeterminate={indeterminate} checked={checkAll} onChange={onCheckAllIndeterminateChange}  />
-    const categorySubmit = <Button type="primary" onClick={onCategorySubmit}>Add Tasks</Button>
+    const categoryCheckbox = <Checkbox className="checkbox-bg" indeterminate={indeterminate} checked={checkAll} onChange={onCheckAllIndeterminateChange}  />
+    const categorySubmit = <Box className="box-button" bg="blue.200" borderRadius="lg" onClick={onCategorySubmit}>Add Tasks</Box>
 
     useEffect(() => {
         if(completeTasks.length === taskNames.length){
@@ -86,35 +80,45 @@ export function CategoryTask(props) {
         }
         setLoaded(true);
     }, []);
+
+    useEffect(() => {
+        setSelectedTasks(completeTasks)
+    }, [completeTasks]);
     return (
         <div className="tab-space">
-            {masterAlertVisible ? <Alert message="Master tasks successfully updated" type="success" showIcon /> : null}
-            {loaded ? <Row justify="space-between" align="middle">
-            <Collapse defaultActiveKey={['1']} className={`task-card ${checked && type!=="master" ? "checked-collapse" : ""}`}>
-                <Panel className="collapse-card-title" showArrow={false} header={category} key="1" extra={type==="master" ? categorySubmit : categoryCheckbox}>
-                    <Row>
-                        {type==="master" ? <Checkbox.Group options={taskNames} value={selectedTasks} onChange={onCategoryTaskChange} /> :
-                            <CheckboxGroup value={checkedList} onChange={onIndeterminateChange} className="checkbox-group" >
-                                {taskNames.map(option =>
-                                    <Col key={option} span={4} className="checkbox-block">
-                                            <img className="checkbox-image"  src={`/images/${option}.png`} onError={(e)=>{e.target.onError = null; e.target.src = "/images/default.png"}} alt="Checkbox" />
-                                            <Checkbox className="checkbox-label" key={option} value={option} onChange={onSingleChange}>{option}</Checkbox>
-                                    </Col>
-                                )}
-                            </CheckboxGroup>
-                        }
-                    </Row>
-                    {/* Commented out but saved in case we decide to introduce tagging */}
-                    {/* <Row className="tag-space">
-                        {tags.map((tagValue)=>{
-                            return (
-                                <Tag>{tagValue}</Tag>
-                            )
-                        })}
-                    </Row> */}
-                </Panel>
-            </Collapse>
-        </Row> : <Spin size="large" />
+            {loaded ? <Center>
+                <Box className="category-card" justify="space-between" align="middle" width="90%" borderWidth="1px" borderTop="0px">
+                    <Accordion className={`${checked && type!=="master" ? "checked-collapse" : ""}`} defaultIndex={[0]} allowMultiple allowToggle>
+                        <AccordionItem>
+                            <AccordionButton bg= "blue.700" _expanded={{ bg: "blue.700", color: "white" }} _hover={{ bg: "blue.700", color: "white" }}>
+                                <Flex width="100%" justify="space-between" align="center" wrap="wrap">
+                                    <Heading size="sm">{category}</Heading>
+                                    {type==="master" ? categorySubmit : categoryCheckbox}
+                                </Flex>
+                            </AccordionButton>
+                            <AccordionPanel pb={4}>
+                                <Box>
+                                    {type==="master" ? <Checkbox.Group options={taskNames} value={selectedTasks} onChange={onCategoryTaskChange} /> :
+                                    <CheckboxGroup value={checkedList} onChange={onIndeterminateChange} className="checkbox-group" >
+                                        <Flex align="center" justify="center" wrap="wrap" width="100%">
+                                            {taskNames.map(option =>
+                                                <Box key={option}className="checkbox-block">
+                                                    <Flex direction="column" align="center">
+                                                        <img className="checkbox-image" src={`/images/${option}.png`} onError={(e)=>{e.target.onError = null; e.target.src = "/images/default.png"}} alt="Checkbox Icon" />
+                                                        {option}
+                                                        <Checkbox className="checkbox-label" key={option} value={option} onChange={onSingleChange} />
+                                                    </Flex>
+                                                </Box>
+                                                )}
+                                        </Flex>
+                                    </CheckboxGroup>
+                                    }
+                                </Box>
+                            </AccordionPanel>
+                        </AccordionItem>
+                    </Accordion>
+                </Box>
+            </Center> : null
             }
         </div>
     )

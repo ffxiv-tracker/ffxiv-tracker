@@ -1,44 +1,61 @@
-import React from 'react';
-import { Alert, Button, Col, Form, Input, Modal, Row, Select, Spin, Typography } from 'antd';
-import { CategoryTask } from  './cardTypes';
+import React, {useEffect} from 'react';
+import {
+    Box,
+    Button,
+    Flex,
+    Heading,
+    Spacer,
+    Spinner,
+    Modal,
+    ModalOverlay,
+    ModalContent,
+    ModalHeader,
+    ModalFooter,
+    ModalBody,
+    ModalCloseButton, useDisclosure, FormControl,
+    FormLabel, Select, Input, useToast
+} from "@chakra-ui/react"
+import { CategoryTask } from './cardTypes';
 import { useGetMasterTasksQuery, useSaveNewTasksMutation } from '../../services/tracker.ts'
-const { Title } = Typography;
-const { Option } = Select;
 
 export default function DailyTasks() {
-    const {data, isLoading} = useGetMasterTasksQuery();
-    const [visible, setVisible] = React.useState(false);
-    const [customAlertVisible, setCustomAlertVisible] = React.useState(false);
+    const { data, isLoading, isFetching } = useGetMasterTasksQuery();
+    const { isOpen, onOpen, onClose } = useDisclosure()
+    const [newTask, setNewTask] = React.useState("");
+    const [frequency, setFrequency] = React.useState(false);
     const [newUserTask] = useSaveNewTasksMutation();
-    const [form] = Form.useForm();
-    const layout = {
-        labelCol: { span: 8 },
-        wrapperCol: { span: 16 },
-    };
-    const tailLayout = {
-        wrapperCol: { offset: 8, span: 16 },
+    const toast = useToast()
+
+    useEffect(() => {
+        console.log("data", data)
+    }, [data]);
+
+    const showAlert = (type) => {
+        let title = ""
+        switch (type) {
+            case "custom":
+                title = "Custom task successfully created"
+                break;
+            case "add":
+                title = "Tasks successfully updated"
+                break;
+            default:
+                break;
+        }
+        toast({
+            title: title,
+            status: "success",
+            position: "top",
+            duration: 2000,
+            isClosable: true,
+        })
     };
 
-    const showModal = () => {
-        setVisible(true);
-    };
-
-    const showAlert= () => {
-        setCustomAlertVisible(true);
-        setTimeout(() => {setCustomAlertVisible(false);}, 3000);
-    };
-
-    const handleCancel = () => {
-        form.setFieldsValue({
-            task: '',
-            description: ''
-        });
-        setVisible(false);
-    };
-    const onFinish = values => {
-        let customTasks = data.filter(t => t.frequency === values.frequency).reduce(function (newArr, task) {
+    const onFinish = (event, values) => {
+        event.preventDefault();
+        let customTasks = data.filter(t => t.frequency === frequency).reduce(function (newArr, task) {
             if (task.category === 'Custom') {
-                task.tasks.map((subtask)=>{
+                task.tasks.map((subtask) => {
                     newArr.push(subtask.name);
                     return null
                 })
@@ -46,105 +63,100 @@ export default function DailyTasks() {
             }
             return newArr;
         }, []);
-        customTasks.push(values.task)
-        const newTask = {
+        customTasks.push(newTask)
+        const newTaskObject = {
             "category": "Custom",
-            "frequency": values.frequency,
+            "frequency": frequency,
             "tasks": customTasks
         }
-        newUserTask(newTask)
-        form.setFieldsValue({
-            task: '',
-            category: ''
-        });
-        setVisible(false);
-        showAlert();
+        newUserTask(newTaskObject)
+        onClose();
+        showAlert("custom");
     };
 
     return (
-        isLoading ? <Spin size="large" /> : (
-        <div className="tab-space">
-            <Row className="task-button" justify="center">
-                <Button onClick={showModal} size="large">
-                    + Add New Task
-                </Button>
-            </Row>
-            <Title level={3} className="centered task-page">Select items to add to your to-do list</Title>
-            {customAlertVisible ? <Alert message="Custom task successfully added" type="success" showIcon /> : null
-            }
-            <Row className="task-page" justify="center">
-                <Col span={10} className="ant-col-fix">
-                    <Title level={2} className="centered">Daily Tasks</Title>
-                    {data.filter(t => t.frequency === 'Daily').map((task, index) => {
-                            let names = []
-                            let selected = []
-                            task.tasks.map((task)=>{
-                                names.push(task.name)
-                                if(task.selected === true){
-                                    selected.push(task.name)
-                                }
-                                return task
-                            })
-                            return (
-                                <CategoryTask key={index} category={task.category} taskNames={names} completeTasks={selected} tags={[]} frequency="Daily" type="master" />
-                            )
-                        })}
-                </Col>
-                <Col span={10} className="ant-col-fix">
-                    <Title level={2} className="centered">Weekly Tasks</Title>
-                    {data.filter(t => t.frequency === 'Weekly').map((task, index) => {
-                            let names = []
-                            let selected = []
-                            task.tasks.map((task)=>{
-                                names.push(task.name)
-                                if(task.selected === true){
-                                    selected.push(task.name)
-                                }
-                                return task
-                            })
-                            return (
-                                <CategoryTask key={index} category={task.category} tasks={task.tasks} taskNames={names} completeTasks={selected} tags={[]} frequency="Weekly" type="master" />
-                            )
-                        })}
-                </Col>
-            </Row>
-            <Modal
-                    title="Add a New Task"
-                    visible={visible}
-                    onCancel={handleCancel}
-                    footer={null}
-                >
-                    <Form
-                        {...layout}
-                        name="tasks"
-                        form={form}
-                        onFinish={onFinish}
-                    >
-                        <Form.Item
-                            label="Task Name"
-                            name="task"
-                            rules={[{ required: true, message: 'Please input your task!' }]}
-                        >
-                            <Input />
-                        </Form.Item>
-                        <Form.Item
-                            label="Task Frequency"
-                            name="frequency"
-                            rules={[{ required: true, message: 'Please select your task frequency!' }]}
-                        >
-                            <Select placeholder="Select your task frequency">
-                                <Option value="Daily">Daily</Option>
-                                <Option value="Weekly">Weekly</Option>
-                            </Select>
-                        </Form.Item>
-                        <Form.Item {...tailLayout}>
-                            <Button type="primary" htmlType="submit">
-                                Submit
-                            </Button>
-                        </Form.Item>
-                    </Form>
+        isLoading ? <Spinner size="xl" /> : (
+            <Box>
+                <Box className="task-page" justify="center">
+                    <Heading size="lg">Select items to add to your to-do list</Heading>
+                    <Button className="task-button" onClick={onOpen} colorScheme="blue" size="lg">
+                        Add New Task
+                    </Button>
+                </Box>
+                <Box justify="center">
+                    <Flex justify="center">
+                        <Spacer />
+                        <Box width="100%">
+                            <Heading className="centered page-header">Daily Tasks</Heading>
+                            {data.filter(t => t.frequency === 'Daily').map((task, index) => {
+                                let names = []
+                                let selected = []
+                                task.tasks.map((task) => {
+                                    names.push(task.name)
+                                    if (task.selected === true) {
+                                        selected.push(task.name)
+                                    }
+                                    return task
+                                })
+                                return (
+                                    <CategoryTask key={index} category={task.category} taskNames={names} completeTasks={selected} tags={[]} frequency="Daily" type="master" showAlert={showAlert} />
+                                )
+                            })}
+                        </Box>
+                        <Spacer />
+                        <Box width="100%">
+                            <Heading className="centered page-header">Weekly Tasks</Heading>
+                            {data.filter(t => t.frequency === 'Weekly').map((task, index) => {
+                                let names = []
+                                let selected = []
+                                task.tasks.map((task) => {
+                                    names.push(task.name)
+                                    if (task.selected === true) {
+                                        selected.push(task.name)
+                                    }
+                                    return task
+                                })
+                                return (
+                                    <CategoryTask key={index} category={task.category} tasks={task.tasks} taskNames={names} completeTasks={selected} tags={[]} frequency="Weekly" type="master" showAlert={showAlert} />
+                                )
+                            })}
+                        </Box>
+                        <Spacer />
+                    </Flex>
+                </Box>
+                <Modal isOpen={isOpen} onClose={onClose}>
+                    <ModalOverlay />
+                    <ModalContent>
+                        <ModalHeader>Add a New Task</ModalHeader>
+                        <ModalCloseButton />
+                        <ModalBody>
+                            <form onSubmit={onFinish}>
+                                <FormControl id="task" isRequired>
+                                    <FormLabel>Task Name</FormLabel>
+                                    <Input placeholder="Task Name" onChange={event => setNewTask(event.currentTarget.value)} />
+                                </FormControl>
+                                <FormControl id="frequency" isRequired>
+                                    <FormLabel>Country</FormLabel>
+                                    <Select placeholder="Select task frequency" onChange={event => setFrequency(event.currentTarget.value)}>
+                                        <option>Daily</option>
+                                        <option>Weekly</option>
+                                    </Select>
+                                </FormControl>
+                                <Button
+                                    mt={4}
+                                    colorScheme="blue"
+                                    type="submit"
+                                >
+                                    Submit
+                                </Button>
+                            </form>
+                        </ModalBody>
+                        <ModalFooter>
+                            <Button variant="ghost" onClick={onClose}>Cancel</Button>
+                        </ModalFooter>
+                    </ModalContent>
                 </Modal>
-        </div>
+            </Box>
         )
     )
 }

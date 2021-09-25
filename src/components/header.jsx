@@ -1,9 +1,7 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
-import { Avatar, Col, Layout, Row } from 'antd';
+import { Avatar, Box, Flex, Image, Text } from "@chakra-ui/react"
 import jwt_decode from "jwt-decode";
-
-const { Header } = Layout;
 
 export default function NavHeader () {
     const jwt = localStorage.getItem("jwt")
@@ -12,23 +10,32 @@ export default function NavHeader () {
         decodedValue = jwt_decode(jwt);
     }
     return (
-        <div>
-            <Layout>
-                <Header className="header">
-                    <Row className="header-row">
-                        <Col className="logo-block" span={8}><img className="logo" src={`/images/tomestone-cropped.png`} alt="Logo" /></Col>
-                                <Col className="menu-text" span={2}><h2><Link className="header-text" to="/">Home</Link></h2></Col>
-                                <Col className="menu-text" span={2}><h2><Link className="header-text" to="/links">Links</Link></h2></Col>
-                                <Col className="menu-text" span={2}><h2><Link className="header-text" to="/tasks">Tasks</Link></h2></Col>
-                                <Col className="menu-text" span={2}><h2><Link className="header-text" to="/master-tasks">Master Tasks</Link></h2></Col>
-                        {jwt ? <Col className="avatar-block" span={8}>
-                            <h3 className ="avatar-username">{decodedValue.username}</h3>
-                            <Avatar size={48} src={`https://cdn.discordapp.com/avatars/${decodedValue.id}/${decodedValue.avatar}.png`} />
-                        </Col> : null}
-                    </Row>
-                </Header>
-            </Layout>
-        </div>
+        <Box className="header" w="100%" bg="gray.700">
+            <Flex>
+                <Box className="header-row" justify="center"  width="15%">
+                    <Image className="logo" src={`/images/tomestone-cropped.png`} alt="Logo" />
+                </Box>
+                <Flex grow="1" direction="row" align="center" justify="center" width="35%">
+                    <Box w="40%">
+                        <Flex direction="row" align="center" justify="space-between">
+                            <Link className="header-text" to="/"><Text fontSize={{ base: "sm", sm: "sm", md: "lg", lg: "lg" }}>Home</Text></Link>
+                            <Link className="header-text" to="/tasks"><Text fontSize={{ base: "sm", sm: "sm", md: "lg", lg: "lg" }}>Tasks</Text></Link>
+                            <Link className="header-text" to="/master-tasks"><Text fontSize={{ base: "sm", sm: "sm", md: "lg", lg: "lg" }}>Edit</Text></Link>
+                            <Link className="header-text" to="/links"><Text fontSize={{ base: "sm", sm: "sm", md: "lg", lg: "lg" }}>Links</Text></Link>
+                        </Flex>
+                    </Box>
+                </Flex>
+                <Flex className="avatar-block" direction="row" align="center">
+                    {jwt ? <Box>
+                        <Flex direction="row" align="center">
+                        <Text className ="avatar-username" fontSize={{ base: "sm", sm: "sm", md: "md", lg: "md" }}>{decodedValue.username}</Text>
+                            <Avatar name={decodedValue.username} size={"md"} src={`https://cdn.discordapp.com/avatars/${decodedValue.id}/${decodedValue.avatar}.png`} />
+                        </Flex>
+                    </Box> : null}
+                </Flex>
+
+            </Flex>
+        </Box>
 
     );
 }

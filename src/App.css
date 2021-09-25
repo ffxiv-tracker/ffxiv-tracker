@@ -12,8 +12,12 @@
 .link-page {
     margin-top: 2%;
 }
+.page-header {
+    margin-bottom: 4%;
+}
 .task-page {
-    margin-top: 1%;
+    margin-top: 2%;
+    text-align: center;
 }
 .tag-space {
     padding-top: 3%;
@@ -29,8 +33,8 @@
     text-align: center;
 }
 .task-button {
-    margin: 0;
-    padding-top: 2%;
+    margin: 1%;
+    text-align: center;
 }
 .collapse-card-title {
     font-weight: bold;
@@ -54,6 +58,11 @@
     padding: 12px;
 }
 
+/* Cards */
+.category-card {
+    margin: 1% 0;
+}
+
 /* Checkbox Classes */
 .checkbox-group {
     display: flex;
@@ -63,7 +72,7 @@
     display: flex;
     align-items: center;
     flex-direction: column;
-    padding: 1%;
+    padding: 3%;
 }
 .checkbox-image {
     max-width: 64px;
@@ -77,16 +86,26 @@
 .splash-box {
     padding-top: 10%;
 }
+.box-button {
+    padding: 1% 2%;
+    color: black;
+    font-weight: 600;
+}
+.checkbox-bg input[type='checkbox'] {
+    background-color: white;
+    opacity: 1;
+}
 
 .header {
-    height: 80px;
+    padding: 0.25% 1%;
 }
 .header-row {
-    width: 100%;
-    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
 }
 .logo {
-    max-height: 50%;
+    max-height: 80%;
 }
 .logo-block {
     display: flex;
@@ -99,13 +118,23 @@
 }
 .header-text {
     color: white;
+    padding: 0 .5%;
+}
+.header-text:hover{
+    color: white;
+    text-decoration: underline;
+    padding: 0 .5%;
 }
 .avatar-block {
-    align-items: center;
-    justify-content: flex-end;
-    display: flex;
-    height: 100%;
+    padding: 0.25% 0;
 }
 .avatar-username {
-    padding-right: 5%;
+    padding: 0 1rem;
+    /* padding-right: 1rem; */
+    color: white;
+}
+
+/* Links */
+.link-button {
+    margin: 3%;
 }
