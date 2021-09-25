@@ -1,6 +1,6 @@
 import React, { useEffect } from 'react';
 import { Checkbox } from 'antd';
-import { Accordion, AccordionItem, AccordionButton, AccordionPanel, Box, Button, Center, Flex, Heading, Spinner, useCheckboxGroup } from "@chakra-ui/react"
+import { Accordion, AccordionItem, AccordionButton, AccordionPanel, Box, Center, Flex, Heading} from "@chakra-ui/react"
 import { useSaveNewTasksMutation, useUpdateUserTaskMutation } from '../../services/tracker.ts'
 const CheckboxGroup = Checkbox.Group;
 
@@ -69,9 +69,8 @@ export function CategoryTask(props) {
     function onCategoryTaskChange(checkedValues) {
         setSelectedTasks(checkedValues)
     }
-    // const categoryCheckbox = <Checkbox isIndeterminate={indeterminate} isChecked={checkAll} onChange={(e) => setCheckedItems([e.target.checked, e.target.checked])} />
-    const categoryCheckbox = <Checkbox indeterminate={indeterminate} checked={checkAll} onChange={onCheckAllIndeterminateChange}  />
-    const categorySubmit = <Box onClick={onCategorySubmit}>Add Tasks</Box>
+    const categoryCheckbox = <Checkbox className="checkbox-bg" indeterminate={indeterminate} checked={checkAll} onChange={onCheckAllIndeterminateChange}  />
+    const categorySubmit = <Box className="box-button" bg="blue.200" borderRadius="lg" onClick={onCategorySubmit}>Add Tasks</Box>
 
     useEffect(() => {
         if(completeTasks.length === taskNames.length){
@@ -81,13 +80,17 @@ export function CategoryTask(props) {
         }
         setLoaded(true);
     }, []);
+
+    useEffect(() => {
+        setSelectedTasks(completeTasks)
+    }, [completeTasks]);
     return (
         <div className="tab-space">
             {loaded ? <Center>
-                <Box className="category-card" justify="space-between" align="middle" width="90%" borderWidth="1px">
+                <Box className="category-card" justify="space-between" align="middle" width="90%" borderWidth="1px" borderTop="0px">
                     <Accordion className={`${checked && type!=="master" ? "checked-collapse" : ""}`} defaultIndex={[0]} allowMultiple allowToggle>
                         <AccordionItem>
-                            <AccordionButton bg="blue.700">
+                            <AccordionButton bg= "blue.700" _expanded={{ bg: "blue.700", color: "white" }} _hover={{ bg: "blue.700", color: "white" }}>
                                 <Flex width="100%" justify="space-between" align="center" wrap="wrap">
                                     <Heading size="sm">{category}</Heading>
                                     {type==="master" ? categorySubmit : categoryCheckbox}

@@ -86,6 +86,15 @@
 .splash-box {
     padding-top: 10%;
 }
+.box-button {
+    padding: 1% 2%;
+    color: black;
+    font-weight: 600;
+}
+.checkbox-bg input[type='checkbox'] {
+    background-color: white;
+    opacity: 1;
+}
 
 .header {
     padding: 0.25% 1%;
@@ -109,7 +118,12 @@
 }
 .header-text {
     color: white;
-    padding: 0 5%;
+    padding: 0 .5%;
+}
+.header-text:hover{
+    color: white;
+    text-decoration: underline;
+    padding: 0 .5%;
 }
 .avatar-block {
     padding: 0.25% 0;

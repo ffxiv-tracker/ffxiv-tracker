@@ -28,7 +28,7 @@ export default function DailyTasks() {
 
     useEffect(() => {
         console.log("data", data)
-    });
+    }, [data]);
 
     const showAlert = (type) => {
         let title = ""
@@ -99,7 +99,7 @@ export default function DailyTasks() {
                                     return task
                                 })
                                 return (
-                                    !isFetching && <CategoryTask key={index} category={task.category} taskNames={names} completeTasks={selected} tags={[]} frequency="Daily" type="master" showAlert={showAlert} />
+                                    <CategoryTask key={index} category={task.category} taskNames={names} completeTasks={selected} tags={[]} frequency="Daily" type="master" showAlert={showAlert} />
                                 )
                             })}
                         </Box>
@@ -117,7 +117,7 @@ export default function DailyTasks() {
                                     return task
                                 })
                                 return (
-                                    !isFetching && <CategoryTask key={index} category={task.category} tasks={task.tasks} taskNames={names} completeTasks={selected} tags={[]} frequency="Weekly" type="master" showAlert={showAlert} />
+                                    <CategoryTask key={index} category={task.category} tasks={task.tasks} taskNames={names} completeTasks={selected} tags={[]} frequency="Weekly" type="master" showAlert={showAlert} />
                                 )
                             })}
                         </Box>
