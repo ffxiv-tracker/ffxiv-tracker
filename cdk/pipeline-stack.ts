@@ -1,13 +1,12 @@
 // Copyright Amazon.com, Inc. or its affiliates. All Rights Reserved.
 // SPDX-License-Identifier: MIT-0
 import * as cdk from "aws-cdk-lib";
+import {aws_codepipeline as codepipeline, aws_codepipeline_actions as actions, aws_codebuild as codebuild, pipelines} from "aws-cdk-lib";
 import {Construct} from "constructs";
-import {pipelines, aws_codepipeline as codepipeline, aws_codepipeline_actions as actions} from "aws-cdk-lib";
 
 export interface PipelineStackProps extends cdk.StackProps {
   name: string;
   branch: string;
-  buildCommand?: string;
 }
 
 export class PipelineStack extends cdk.Stack {
@@ -18,8 +17,6 @@ export class PipelineStack extends cdk.Stack {
 
     const sourceArtifact = new codepipeline.Artifact();
     const cloudAssemblyArtifact = new codepipeline.Artifact();
-
-    const buildCommand = props.buildCommand || 'build';
 
     this.pipeline = new pipelines.CdkPipeline(this, "Pipeline", {
       pipelineName: `${props.name}-DeliveryPipeline`,
@@ -36,7 +33,13 @@ export class PipelineStack extends cdk.Stack {
       synthAction: pipelines.SimpleSynthAction.standardNpmSynth({
         sourceArtifact,
         cloudAssemblyArtifact,
-        buildCommand: `npm run ${buildCommand} && npm run cdk-build`,
+        buildCommand: `npm run build && npm run cdk-build`,
+        environmentVariables: {
+          REACT_APP_HOST: {
+            type: codebuild.BuildEnvironmentVariableType.PLAINTEXT,
+            value: 'https://tasks-staging.tomestone.dev',
+          },
+        }
       }),
     });
   }
