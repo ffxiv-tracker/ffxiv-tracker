@@ -55,6 +55,11 @@
     padding: 12px;
 }
 
+/* Cards */
+.category-card {
+    margin: 1% 0;
+}
+
 /* Checkbox Classes */
 .checkbox-group {
     display: flex;
@@ -110,4 +115,9 @@
     padding: 0 1rem;
     /* padding-right: 1rem; */
     color: white;
+}
+
+/* Links */
+.link-button {
+    margin: 3%;
 }

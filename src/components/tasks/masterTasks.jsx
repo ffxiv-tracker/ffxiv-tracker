@@ -1,7 +1,5 @@
 import React from 'react';
 import {
-    Alert,
-    AlertIcon,
     Box,
     Button,
     Flex,
@@ -15,7 +13,7 @@ import {
     ModalFooter,
     ModalBody,
     ModalCloseButton, useDisclosure, FormControl,
-    FormLabel, Select, Input
+    FormLabel, Select, Input, useToast
 } from "@chakra-ui/react"
 import { CategoryTask } from './cardTypes';
 import { useGetMasterTasksQuery, useSaveNewTasksMutation } from '../../services/tracker.ts'
@@ -25,12 +23,28 @@ export default function DailyTasks() {
     const { isOpen, onOpen, onClose } = useDisclosure()
     const [newTask, setNewTask] = React.useState("");
     const [frequency, setFrequency] = React.useState(false);
-    const [customAlertVisible, setCustomAlertVisible] = React.useState(false);
     const [newUserTask] = useSaveNewTasksMutation();
+    const toast = useToast()
 
-    const showAlert = () => {
-        setCustomAlertVisible(true);
-        setTimeout(() => { setCustomAlertVisible(false); }, 3000);
+    const showAlert = (type) => {
+        let title = ""
+        switch (type) {
+            case "custom":
+                title = "Custom task successfully created"
+                break;
+            case "add":
+                title = "Tasks successfully updated"
+                break;
+            default:
+                break;
+        }
+        toast({
+            title: title,
+            status: "success",
+            position: "top",
+            duration: 2000,
+            isClosable: true,
+        })
     };
 
     const onFinish = (event, values) => {
@@ -53,24 +67,22 @@ export default function DailyTasks() {
         }
         newUserTask(newTaskObject)
         onClose();
-        showAlert();
+        showAlert("custom");
     };
 
     return (
         isLoading ? <Spinner size="xl" /> : (
             <Box>
                 <Box className="task-page" justify="center">
-                    <Heading>Select items to add to your to-do list</Heading>
+                    <Heading size="lg">Select items to add to your to-do list</Heading>
                     <Button className="task-button" onClick={onOpen} colorScheme="blue" size="lg">
                         Add New Task
                     </Button>
                 </Box>
-                {customAlertVisible ? <Alert status="success"><AlertIcon />Custom task successfully added</Alert> : null
-                }
                 <Box justify="center">
                     <Flex>
                         <Spacer />
-                        <Box>
+                        <Box width="100%">
                             <Heading className="centered">Daily Tasks</Heading>
                             {data.filter(t => t.frequency === 'Daily').map((task, index) => {
                                 let names = []
@@ -83,12 +95,12 @@ export default function DailyTasks() {
                                     return task
                                 })
                                 return (
-                                    <CategoryTask key={index} category={task.category} taskNames={names} completeTasks={selected} tags={[]} frequency="Daily" type="master" />
+                                    <CategoryTask key={index} category={task.category} taskNames={names} completeTasks={selected} tags={[]} frequency="Daily" type="master" showAlert={showAlert} />
                                 )
                             })}
                         </Box>
                         <Spacer />
-                        <Box>
+                        <Box width="100%">
                             <Heading className="centered">Weekly Tasks</Heading>
                             {data.filter(t => t.frequency === 'Weekly').map((task, index) => {
                                 let names = []
@@ -101,7 +113,7 @@ export default function DailyTasks() {
                                     return task
                                 })
                                 return (
-                                    <CategoryTask key={index} category={task.category} tasks={task.tasks} taskNames={names} completeTasks={selected} tags={[]} frequency="Weekly" type="master" />
+                                    <CategoryTask key={index} category={task.category} tasks={task.tasks} taskNames={names} completeTasks={selected} tags={[]} frequency="Weekly" type="master" showAlert={showAlert} />
                                 )
                             })}
                         </Box>
