@@ -9,6 +9,7 @@ const app = new cdk.App();
 const staging = new PipelineStack(app, "Staging-DeliveryPipeline", {
     name: "App-Staging",
     branch: "develop",
+    buildCommand: "build:staging"
 });
 
 const stagingStage = new FrontEndStage(app, "Staging-App", {
