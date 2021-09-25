@@ -1,18 +1,18 @@
 import React from 'react';
-import { Col, Row, Spin, Typography } from 'antd';
+import { Box, Flex, Heading, Spacer, Spinner } from "@chakra-ui/react"
 import { CategoryTask } from  './cardTypes';
 import { useGetUserTasksQuery } from '../../services/tracker.ts'
-const { Title } = Typography;
 
 
 export default function TasksPage() {
     const {data, isLoading} = useGetUserTasksQuery();
     return (
-        isLoading ? <Spin size="large" /> : (
-            <div className="tab-space">
-                <Row className="task-page" justify="center">
-                    <Col span={10} className="ant-col-fix">
-                        <Title level={2} className="centered">Daily Tasks</Title>
+        isLoading ? <Spinner size="xl" /> : (
+            <Box className="task-page" justify="center">
+                <Flex justify="center">
+                    <Spacer />
+                    <Box width="40%">
+                        <Heading className="page-header">Daily Tasks</Heading>
                         {data.filter(t => t.frequency === 'Daily').map((task, index) => {
                             let names = []
                             let done = []
@@ -27,9 +27,10 @@ export default function TasksPage() {
                                 <CategoryTask key={index} category={task.category} taskNames={names} completeTasks={done} tags={[]} frequency="Daily" type="" />
                             )
                         })}
-                    </Col>
-                    <Col span={10} className="ant-col-fix">
-                        <Title level={2} className="centered">Weekly Tasks</Title>
+                    </Box>
+                    <Spacer />
+                    <Box width="40%" className="">
+                        <Heading className="page-header">Weekly Tasks</Heading>
                         {data.filter(t => t.frequency === 'Weekly').map((task, index) => {
                             let names = []
                             let done = []
@@ -44,9 +45,10 @@ export default function TasksPage() {
                                 <CategoryTask key={index} category={task.category} tasks={task.tasks} taskNames={names} completeTasks={done} tags={[]} frequency="Weekly" type="" />
                             )
                         })}
-                    </Col>
-                </Row>
-            </div>
+                    </Box>
+                    <Spacer />
+                </Flex>
+            </Box>
         )
     );
 }
