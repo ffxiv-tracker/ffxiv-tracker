@@ -7,6 +7,7 @@ import {pipelines, aws_codepipeline as codepipeline, aws_codepipeline_actions as
 export interface PipelineStackProps extends cdk.StackProps {
   name: string;
   branch: string;
+  buildCommand?: string;
 }
 
 export class PipelineStack extends cdk.Stack {
@@ -17,6 +18,8 @@ export class PipelineStack extends cdk.Stack {
 
     const sourceArtifact = new codepipeline.Artifact();
     const cloudAssemblyArtifact = new codepipeline.Artifact();
+
+    const buildCommand = props.buildCommand || 'build';
 
     this.pipeline = new pipelines.CdkPipeline(this, "Pipeline", {
       pipelineName: `${props.name}-DeliveryPipeline`,
@@ -33,7 +36,7 @@ export class PipelineStack extends cdk.Stack {
       synthAction: pipelines.SimpleSynthAction.standardNpmSynth({
         sourceArtifact,
         cloudAssemblyArtifact,
-        buildCommand: 'npm run build && npm run cdk-build',
+        buildCommand: `npm run ${buildCommand} && npm run cdk-build`,
       }),
     });
   }

@@ -6,7 +6,7 @@ export default function Login() {
         <div className="container link-page">
             <Row justify="space-around">
                 <Col className="splash-box">
-                    <a href={`${apiBaseUrl}login`}><img alt="Login" src="/images/discordlogin.png"/></a>
+                    <a href={`${apiBaseUrl}/login?redirect=${process.env.REACT_APP_HOST}`}><img alt="Login" src="/images/discordlogin.png"/></a>
                 </Col>
             </Row>
         </div>

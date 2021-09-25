@@ -1,6 +1,6 @@
 import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react'
 
-export const apiBaseUrl = 'https://tasks-api.tomestone.dev/';
+export const apiBaseUrl = process.env.REACT_APP_API_HOST;
 
 // Define a service using a base URL and expected endpoints
 export const trackerApi = createApi({

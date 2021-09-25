@@ -23,6 +23,7 @@
   "scripts": {
     "start": "react-scripts start",
     "build": "react-scripts build",
+    "build:staging": "sh -ac '. .env.staging; react-scripts build'",
     "test": "react-scripts test",
     "eject": "react-scripts eject",
     "cdk-build": "tsc --target ES2018 --moduleResolution node --module commonjs cdk/index.ts",
