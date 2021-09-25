@@ -11,8 +11,8 @@ export default function TasksPage() {
             <Box className="task-page" justify="center">
                 <Flex justify="center">
                     <Spacer />
-                    <Box width="40%" className="">
-                        <Heading level={2} className="centered">Daily Tasks</Heading>
+                    <Box width="40%">
+                        <Heading className="page-header">Daily Tasks</Heading>
                         {data.filter(t => t.frequency === 'Daily').map((task, index) => {
                             let names = []
                             let done = []
@@ -30,7 +30,7 @@ export default function TasksPage() {
                     </Box>
                     <Spacer />
                     <Box width="40%" className="">
-                        <Heading level={2} className="centered">Weekly Tasks</Heading>
+                        <Heading className="page-header">Weekly Tasks</Heading>
                         {data.filter(t => t.frequency === 'Weekly').map((task, index) => {
                             let names = []
                             let done = []

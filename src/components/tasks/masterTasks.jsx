@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useEffect} from 'react';
 import {
     Box,
     Button,
@@ -19,12 +19,16 @@ import { CategoryTask } from './cardTypes';
 import { useGetMasterTasksQuery, useSaveNewTasksMutation } from '../../services/tracker.ts'
 
 export default function DailyTasks() {
-    const { data, isLoading } = useGetMasterTasksQuery();
+    const { data, isLoading, isFetching } = useGetMasterTasksQuery();
     const { isOpen, onOpen, onClose } = useDisclosure()
     const [newTask, setNewTask] = React.useState("");
     const [frequency, setFrequency] = React.useState(false);
     const [newUserTask] = useSaveNewTasksMutation();
     const toast = useToast()
+
+    useEffect(() => {
+        console.log("data", data)
+    });
 
     const showAlert = (type) => {
         let title = ""
@@ -80,10 +84,10 @@ export default function DailyTasks() {
                     </Button>
                 </Box>
                 <Box justify="center">
-                    <Flex>
+                    <Flex justify="center">
                         <Spacer />
                         <Box width="100%">
-                            <Heading className="centered">Daily Tasks</Heading>
+                            <Heading className="centered page-header">Daily Tasks</Heading>
                             {data.filter(t => t.frequency === 'Daily').map((task, index) => {
                                 let names = []
                                 let selected = []
@@ -95,13 +99,13 @@ export default function DailyTasks() {
                                     return task
                                 })
                                 return (
-                                    <CategoryTask key={index} category={task.category} taskNames={names} completeTasks={selected} tags={[]} frequency="Daily" type="master" showAlert={showAlert} />
+                                    !isFetching && <CategoryTask key={index} category={task.category} taskNames={names} completeTasks={selected} tags={[]} frequency="Daily" type="master" showAlert={showAlert} />
                                 )
                             })}
                         </Box>
                         <Spacer />
                         <Box width="100%">
-                            <Heading className="centered">Weekly Tasks</Heading>
+                            <Heading className="centered page-header">Weekly Tasks</Heading>
                             {data.filter(t => t.frequency === 'Weekly').map((task, index) => {
                                 let names = []
                                 let selected = []
@@ -113,7 +117,7 @@ export default function DailyTasks() {
                                     return task
                                 })
                                 return (
-                                    <CategoryTask key={index} category={task.category} tasks={task.tasks} taskNames={names} completeTasks={selected} tags={[]} frequency="Weekly" type="master" showAlert={showAlert} />
+                                    !isFetching && <CategoryTask key={index} category={task.category} tasks={task.tasks} taskNames={names} completeTasks={selected} tags={[]} frequency="Weekly" type="master" showAlert={showAlert} />
                                 )
                             })}
                         </Box>

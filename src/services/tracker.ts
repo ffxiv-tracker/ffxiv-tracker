@@ -16,7 +16,7 @@ export const trackerApi = createApi({
             return headers;
         }
     }),
-    tagTypes: ['Task'],
+    tagTypes: ['Base', 'Task'],
     endpoints: (builder) => ({
         exchange: builder.mutation({
             query: (body) =>{
@@ -32,7 +32,7 @@ export const trackerApi = createApi({
         }),
         getMasterTasks: builder.query({
             query: () => `tasks`,
-            providesTags: ['Task']
+            providesTags: ['Base']
         }),
         getUserTasks: builder.query({
             query: () => `user/tasks`,
@@ -47,7 +47,7 @@ export const trackerApi = createApi({
                     body,
                 }
             },
-            invalidatesTags: ['Task']
+            invalidatesTags: ['Base']
         }),
         updateUserTask: builder.mutation({
             query: (body) =>{
@@ -56,7 +56,8 @@ export const trackerApi = createApi({
                     method: 'POST',
                     body,
                 }
-            }
+            },
+            invalidatesTags: ['Base', 'Task']
         }),
     }),
 })

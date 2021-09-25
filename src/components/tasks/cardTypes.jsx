@@ -1,6 +1,8 @@
 import React, { useEffect } from 'react';
-import { Accordion, AccordionItem, AccordionButton, AccordionPanel, Box, Button, Center, Checkbox, CheckboxGroup, Flex, Heading, Spinner } from "@chakra-ui/react"
+import { Checkbox } from 'antd';
+import { Accordion, AccordionItem, AccordionButton, AccordionPanel, Box, Button, Center, Flex, Heading, Spinner, useCheckboxGroup } from "@chakra-ui/react"
 import { useSaveNewTasksMutation, useUpdateUserTaskMutation } from '../../services/tracker.ts'
+const CheckboxGroup = Checkbox.Group;
 
 export function CategoryTask(props) {
     const { category, frequency, showAlert, type, taskNames, completeTasks} = props;
@@ -24,12 +26,12 @@ export function CategoryTask(props) {
             setChecked(false)
         }
     };
-    const onSingleChange = async (e) => {
+    const onSingleChange = async (event) => {
         let task = {
             "category": category,
             "frequency": frequency,
-            "task": e.target.value,
-            "done": e.target.checked
+            "task": event.target.value,
+            "done": event.target.checked
         };
         updateUserTask(task)
 
@@ -67,8 +69,9 @@ export function CategoryTask(props) {
     function onCategoryTaskChange(checkedValues) {
         setSelectedTasks(checkedValues)
     }
-    const categoryCheckbox = <Checkbox isIndeterminate={indeterminate} isChecked={checkAll} onChange={onCheckAllIndeterminateChange}  />
-    const categorySubmit = <Button type="primary" onClick={onCategorySubmit}>Add Tasks</Button>
+    // const categoryCheckbox = <Checkbox isIndeterminate={indeterminate} isChecked={checkAll} onChange={(e) => setCheckedItems([e.target.checked, e.target.checked])} />
+    const categoryCheckbox = <Checkbox indeterminate={indeterminate} checked={checkAll} onChange={onCheckAllIndeterminateChange}  />
+    const categorySubmit = <Box onClick={onCategorySubmit}>Add Tasks</Box>
 
     useEffect(() => {
         if(completeTasks.length === taskNames.length){
@@ -92,12 +95,9 @@ export function CategoryTask(props) {
                             </AccordionButton>
                             <AccordionPanel pb={4}>
                                 <Box>
-                                    {type==="master" ? <CheckboxGroup options={taskNames} defaultValue={selectedTasks} onChange={onCategoryTaskChange}>
-                                        {taskNames.map(option =>
-                                            <Checkbox className="checkbox-label" key={option} value={option} onChange={onSingleChange} >{option}</Checkbox>
-                                        )}
-                                    </CheckboxGroup> : <CheckboxGroup defaultValue={checkedList} onChange={onIndeterminateChange} className="checkbox-group" >
-                                        <Flex align="center" wrap="wrap">
+                                    {type==="master" ? <Checkbox.Group options={taskNames} value={selectedTasks} onChange={onCategoryTaskChange} /> :
+                                    <CheckboxGroup value={checkedList} onChange={onIndeterminateChange} className="checkbox-group" >
+                                        <Flex align="center" justify="center" wrap="wrap" width="100%">
                                             {taskNames.map(option =>
                                                 <Box key={option}className="checkbox-block">
                                                     <Flex direction="column" align="center">
@@ -115,7 +115,7 @@ export function CategoryTask(props) {
                         </AccordionItem>
                     </Accordion>
                 </Box>
-            </Center> : <Spinner size="xl" />
+            </Center> : null
             }
         </div>
     )

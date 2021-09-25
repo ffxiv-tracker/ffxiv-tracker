@@ -12,6 +12,9 @@
 .link-page {
     margin-top: 2%;
 }
+.page-header {
+    margin-bottom: 4%;
+}
 .task-page {
     margin-top: 2%;
     text-align: center;
@@ -69,7 +72,7 @@
     display: flex;
     align-items: center;
     flex-direction: column;
-    padding: 1%;
+    padding: 3%;
 }
 .checkbox-image {
     max-width: 64px;
