@@ -2,6 +2,7 @@ import React from 'react';
 import { Link } from 'react-router-dom';
 import { Avatar, Box, Flex, Image, Text } from "@chakra-ui/react"
 import jwt_decode from "jwt-decode";
+import Timer from '../components/timer/subTimer'
 
 export default function NavHeader () {
     const jwt = localStorage.getItem("jwt")
@@ -21,6 +22,7 @@ export default function NavHeader () {
                             <Link className="header-text" to="/tasks"><Text fontSize={{ base: "sm", sm: "sm", md: "lg", lg: "lg" }}>Tasks</Text></Link>
                             <Link className="header-text" to="/master-tasks"><Text fontSize={{ base: "sm", sm: "sm", md: "lg", lg: "lg" }}>Edit</Text></Link>
                             <Link className="header-text" to="/links"><Text fontSize={{ base: "sm", sm: "sm", md: "lg", lg: "lg" }}>Links</Text></Link>
+                            <Timer />
                         </Flex>
                     </Box>
                 </Flex>
