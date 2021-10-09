@@ -1,9 +1,9 @@
 import React from 'react';
 import moment from 'moment';
-import { Box, Button, Flex, Menu, MenuButton, MenuList, MenuItem, Modal, ModalOverlay, ModalContent, ModalHeader, ModalFooter, ModalBody, ModalCloseButton, Progress, useDisclosure, FormControl, FormLabel, Select, Input } from "@chakra-ui/react"
-import {Countdown} from './countdown';
+import { Box, Button, Flex, Heading, Menu, MenuButton, MenuDivider, MenuList, MenuItem, Modal, ModalOverlay, ModalContent, ModalHeader, ModalBody, ModalCloseButton, useDisclosure, FormControl, FormLabel, Input } from "@chakra-ui/react"
+import { Countdown } from './countdown';
 
-export default function Timer () {
+export default function Timer() {
     const { isOpen, onOpen, onClose } = useDisclosure()
     const storedTimers = JSON.parse(localStorage.getItem("timers"))
     const [newTimerName, setNewTimerName] = React.useState("");
@@ -18,11 +18,11 @@ export default function Timer () {
         const newDuration = dt.add(dur);
         const epoch = newDuration.unix()
         let timers = []
-        if(storedTimers){
+        if (storedTimers) {
             timers = storedTimers
         }
         let newTimer = {}
-        Object.assign(newTimer, { name: newTimerName, days: newTimerDays, hours: newTimerHours, minutes: newTimerMinutes, duration: epoch});
+        Object.assign(newTimer, { name: newTimerName, days: newTimerDays, hours: newTimerHours, minutes: newTimerMinutes, duration: epoch });
         timers.push(newTimer)
         const stringTimer = JSON.stringify(timers)
         localStorage.setItem("timers", stringTimer);
@@ -33,27 +33,29 @@ export default function Timer () {
             <Flex direction="row" align="center" justify="center">
                 <Box className="header-row" justify="center">
                     <Menu>
-                    {({ isOpen }) => (
-                        <>
-                            <MenuButton isActive={isOpen} as={Button}>
-                                Timers
-                            </MenuButton>
-                            <MenuList>
-                                {storedTimers ? storedTimers.map((timer)=>{
-                                    console.log(timer.duration)
+                        {({ isOpen }) => (
+                            <>
+                                <MenuButton isActive={isOpen} as={Button}>
+                                    Timers
+                                </MenuButton>
+                                <MenuList>
+                                    {storedTimers ? storedTimers.map((timer) => {
                                         return (
-                                            <MenuItem >
-                                                <Box>
-                                                    {timer.name}
-                                                    <Countdown key={timer.name} eventTime={timer.duration} interval={60000} />
-                                                </Box>
-                                            </MenuItem>)
+                                            <Box>
+                                                <MenuItem key={timer.name}>
+                                                    <Box>
+                                                        <Heading as="h5" size="sm">{timer.name}</Heading>
+                                                        <Countdown eventTime={timer.duration} interval={60000} />
+                                                    </Box>
+                                                </MenuItem>
+                                                <MenuDivider />
+                                            </Box>)
                                     }) : null
-                                }
-                                <MenuItem onClick={onOpen}>Add New Timer</MenuItem>
-                            </MenuList>
-                        </>
-                    )}
+                                    }
+                                    <MenuItem onClick={onOpen}><Button bg="blue.700">Add New Timer</Button></MenuItem>
+                                </MenuList>
+                            </>
+                        )}
                     </Menu>
                 </Box>
             </Flex>
@@ -65,8 +67,8 @@ export default function Timer () {
                     <ModalBody>
                         <form onSubmit={onFinish}>
                             <FormControl id="name" isRequired>
-                                <FormLabel>Timer Name</FormLabel>
-                                <Input placeholder="Timer Name" onChange={event => setNewTimerName(event.currentTarget.value)} />
+                                <FormLabel>Sub Name</FormLabel>
+                                <Input placeholder="sub Name" onChange={event => setNewTimerName(event.currentTarget.value)} />
                             </FormControl>
                             <FormControl id="days" isRequired>
                                 <FormLabel>Days</FormLabel>
