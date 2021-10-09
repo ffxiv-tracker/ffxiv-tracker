@@ -18,7 +18,6 @@ export default function NavHeader () {
                 <Flex grow="1" direction="row" align="center" justify="center" width="35%">
                     <Box w="40%">
                         <Flex direction="row" align="center" justify="space-between">
-                            <Link className="header-text" to="/"><Text fontSize={{ base: "sm", sm: "sm", md: "lg", lg: "lg" }}>Home</Text></Link>
                             <Link className="header-text" to="/tasks"><Text fontSize={{ base: "sm", sm: "sm", md: "lg", lg: "lg" }}>Tasks</Text></Link>
                             <Link className="header-text" to="/master-tasks"><Text fontSize={{ base: "sm", sm: "sm", md: "lg", lg: "lg" }}>Edit</Text></Link>
                             <Link className="header-text" to="/links"><Text fontSize={{ base: "sm", sm: "sm", md: "lg", lg: "lg" }}>Links</Text></Link>
