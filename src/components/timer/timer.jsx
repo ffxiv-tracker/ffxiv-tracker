@@ -1,6 +1,12 @@
 import React from 'react';
 import moment from 'moment';
-import { Box, Button, Flex, Heading, Menu, MenuButton, MenuDivider, MenuList, MenuItem, Modal, ModalOverlay, ModalContent, ModalHeader, ModalBody, ModalCloseButton, useDisclosure, FormControl, FormLabel, Input } from "@chakra-ui/react"
+import { Box, Button, Flex, Heading, Menu, MenuButton, MenuDivider, MenuList, MenuItem, Modal, ModalOverlay, ModalContent, ModalHeader, ModalBody, ModalCloseButton, useDisclosure, useToast, FormControl, FormLabel, Input, AlertDialog,
+    AlertDialogBody,
+    AlertDialogFooter,
+    AlertDialogHeader,
+    AlertDialogContent,
+    AlertDialogOverlay, } from "@chakra-ui/react"
+import { CloseIcon } from '@chakra-ui/icons'
 import { Countdown } from './countdown';
 
 export default function Timer() {
@@ -10,23 +16,50 @@ export default function Timer() {
     const [newTimerDays, setNewTimerDays] = React.useState("");
     const [newTimerHours, setNewTimerHours] = React.useState("");
     const [newTimerMinutes, setNewTimerMinutes] = React.useState("");
+    const [editingTimer, setEditingTimer] = React.useState("");
+    const [alertOpen, setAlertOpen] = React.useState(false);
+    const cancelRef = React.useRef()
+    const toast = useToast()
+    const onAlertClose = () => setAlertOpen(false)
 
+    const editTimer = (name) =>{
+        setEditingTimer(name)
+        setAlertOpen(true)
+
+    }
+    const removeTimer = () =>{
+        const updatedTimers = storedTimers.filter((item) => item.name !== editingTimer);
+        const stringTimer = JSON.stringify(updatedTimers)
+        localStorage.setItem("timers", stringTimer);
+        onAlertClose()
+        toast({
+            title: `${editingTimer} Timer Deleted`,
+            status: "success",
+            duration: 2000,
+            isClosable: true,
+          })
+
+    }
     const onFinish = (event) => {
         event.preventDefault();
-        var dt = moment();
-        var dur = moment.duration({ days: newTimerDays, hours: newTimerHours, minutes: newTimerMinutes });
-        const newDuration = dt.add(dur);
-        const epoch = newDuration.unix()
-        let timers = []
-        if (storedTimers) {
-            timers = storedTimers
-        }
-        let newTimer = {}
-        Object.assign(newTimer, { name: newTimerName, days: newTimerDays, hours: newTimerHours, minutes: newTimerMinutes, duration: epoch });
-        timers.push(newTimer)
-        const stringTimer = JSON.stringify(timers)
-        localStorage.setItem("timers", stringTimer);
-        onClose();
+            var dt = moment();
+            var dur = moment.duration({ days: newTimerDays, hours: newTimerHours, minutes: newTimerMinutes });
+            const newDuration = dt.add(dur);
+            const epoch = newDuration.unix()
+            let timers = []
+            if (storedTimers) {
+                timers = storedTimers
+            }
+            let newTimer = {}
+            Object.assign(newTimer, { name: newTimerName, days: newTimerDays, hours: newTimerHours, minutes: newTimerMinutes, duration: epoch });
+            timers.push(newTimer)
+            const stringTimer = JSON.stringify(timers)
+            localStorage.setItem("timers", stringTimer);
+            setNewTimerName("")
+            setNewTimerDays(0)
+            setNewTimerHours(0)
+            setNewTimerMinutes(0)
+            onClose();
     };
     return (
         <Box>
@@ -41,8 +74,8 @@ export default function Timer() {
                                 <MenuList>
                                     {storedTimers ? storedTimers.map((timer) => {
                                         return (
-                                            <Box>
-                                                <MenuItem key={timer.name}>
+                                            <Box key={timer.name}>
+                                                <MenuItem icon={<CloseIcon onClick={() => editTimer(timer.name)} />}>
                                                     <Box>
                                                         <Heading as="h5" size="sm">{timer.name}</Heading>
                                                         <Countdown eventTime={timer.duration} interval={60000} />
@@ -67,8 +100,8 @@ export default function Timer() {
                     <ModalBody>
                         <form onSubmit={onFinish}>
                             <FormControl id="name" isRequired>
-                                <FormLabel>Sub Name</FormLabel>
-                                <Input placeholder="sub Name" onChange={event => setNewTimerName(event.currentTarget.value)} />
+                                <FormLabel>Timer Name</FormLabel>
+                                <Input placeholder="Timer Name" onChange={event => setNewTimerName(event.currentTarget.value)} />
                             </FormControl>
                             <FormControl id="days" isRequired>
                                 <FormLabel>Days</FormLabel>
@@ -93,6 +126,30 @@ export default function Timer() {
                     </ModalBody>
                 </ModalContent>
             </Modal>
+            <AlertDialog
+                isOpen={alertOpen}
+                leastDestructiveRef={cancelRef}
+                onClose={onAlertClose}
+            >
+                <AlertDialogOverlay>
+                    <AlertDialogContent>
+                        <AlertDialogHeader fontSize="lg" fontWeight="bold">
+                        Delete Timer - {editingTimer}
+                        </AlertDialogHeader>
+                        <AlertDialogBody>
+                            Are you sure you want to delete the timer? You can't undo this action afterwards.
+                        </AlertDialogBody>
+                        <AlertDialogFooter>
+                        <Button ref={cancelRef} onClick={onAlertClose}>
+                            Cancel
+                        </Button>
+                        <Button colorScheme="red" onClick={removeTimer} ml={3}>
+                            Delete
+                        </Button>
+                        </AlertDialogFooter>
+                    </AlertDialogContent>
+                </AlertDialogOverlay>
+            </AlertDialog>
         </Box>
 
     );
