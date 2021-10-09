@@ -37,7 +37,7 @@ export default function Timer() {
             status: "success",
             duration: 2000,
             isClosable: true,
-          })
+        })
 
     }
     const onFinish = (event) => {
