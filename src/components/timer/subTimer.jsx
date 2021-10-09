@@ -45,7 +45,7 @@ export default function Timer () {
                                             <MenuItem >
                                                 <Box>
                                                     {timer.name}
-                                                    <Countdown key={timer.name} eventTime={timer.duration} interval={1000} />
+                                                    <Countdown key={timer.name} eventTime={timer.duration} interval={60000} />
                                                 </Box>
                                             </MenuItem>)
                                     }) : null
