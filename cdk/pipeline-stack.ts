@@ -7,6 +7,7 @@ import {Construct} from "constructs";
 export interface PipelineStackProps extends cdk.StackProps {
   name: string;
   branch: string;
+  domain: string;
 }
 
 export class PipelineStack extends cdk.Stack {
@@ -37,7 +38,7 @@ export class PipelineStack extends cdk.Stack {
         environmentVariables: {
           REACT_APP_HOST: {
             type: codebuild.BuildEnvironmentVariableType.PLAINTEXT,
-            value: 'https://tasks-staging.tomestone.dev',
+            value: `https://${props.domain}`,
           },
         }
       }),
