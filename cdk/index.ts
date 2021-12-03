@@ -12,12 +12,12 @@ interface PipelineEnv {
 
 const envs: PipelineEnv[] = [
   {
-    stage: 'staging',
+    stage: 'Staging',
     branch: 'develop',
     domain: 'tasks-staging.tomestone.dev',
   },
   {
-    stage: 'prod',
+    stage: 'Prod',
     branch: 'main',
     domain: 'tasks.tomestone.dev',
   },
@@ -27,7 +27,7 @@ const app = new cdk.App();
 
 envs.forEach(({stage, branch, domain}) => {
   new PipelineStack(app, `${stage}-DeliveryPipeline`, {
-    name: stage,
+    name: `App-${stage}`,
     branch,
     domain,
   }).pipeline.addApplicationStage(
