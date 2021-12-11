@@ -136,7 +136,7 @@ export default function DailyTasks() {
                                     <Input placeholder="Task Name" onChange={event => setNewTask(event.currentTarget.value)} />
                                 </FormControl>
                                 <FormControl id="frequency" isRequired>
-                                    <FormLabel>Country</FormLabel>
+                                    <FormLabel>Frequency</FormLabel>
                                     <Select placeholder="Select task frequency" onChange={event => setFrequency(event.currentTarget.value)}>
                                         <option>Daily</option>
                                         <option>Weekly</option>
