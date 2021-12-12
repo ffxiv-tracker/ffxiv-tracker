@@ -138,3 +138,15 @@
 .link-button {
     margin: 3%;
 }
+
+/* List Styles */
+.parent-list {
+    text-align: left;
+}
+.child-list {
+    margin-left: 50px;
+}
+.child-list-item {
+    display: flex;
+    align-items: center;
+}
