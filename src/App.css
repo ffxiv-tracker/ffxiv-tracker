@@ -140,13 +140,31 @@
 }
 
 /* List Styles */
+.list-box {
+    padding: 10%;
+    width: 100% !important;
+}
 .parent-list {
     text-align: left;
 }
 .child-list {
-    margin-left: 50px;
+    /* margin-left: 50px; */
+    margin-bottom: 1.5em;
 }
 .child-list-item {
     display: flex;
     align-items: center;
+    justify-content: space-between;
+    padding: 0.5em;
+    margin: 0.5em 0;
+    background-image: linear-gradient(to top, #4299e1, #90cdf4);
+}
+.child-list-item:hover {
+    background-image: linear-gradient(to top, #2C5282, #4299e1);
+}
+.child-list-icon {
+    margin: 0 !important;
+}
+.list-center {
+    justify-content: center;
 }
