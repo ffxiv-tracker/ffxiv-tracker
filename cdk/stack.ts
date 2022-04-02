@@ -34,7 +34,7 @@ export class FrontEndStack extends Stack {
         });
 
         //Create Certificate
-        const siteCertificate = acm.Certificate.fromCertificateArn(this, 'SiteCertificate', 'arn:aws:acm:us-east-1:806603473952:certificate/5d598376-eb8d-4537-ab40-99debe2dced9');
+        const siteCertificate = acm.Certificate.fromCertificateArn(this, 'SiteCertificate', 'arn:aws:acm:us-east-1:806603473952:certificate/0c31ebc1-5f94-4827-9b17-107c7224eb79');
 
         //Create CloudFront Distribution
         const siteDistribution = new cloudfront.Distribution(this, 'SiteDistribution', {

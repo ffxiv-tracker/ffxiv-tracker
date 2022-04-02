@@ -4,26 +4,35 @@ import * as cdk from 'aws-cdk-lib';
 import {PipelineStack} from "./pipeline-stack";
 import {FrontEndStage} from "./frontend-stage";
 
+interface PipelineEnv {
+    stage: string;
+    branch: string;
+    domain: string;
+}
+
+const envs: PipelineEnv[] = [
+  {
+    stage: 'Staging',
+    branch: 'develop',
+    domain: 'tasks-staging.tomestone.dev',
+  },
+  {
+    stage: 'Prod',
+    branch: 'main',
+    domain: 'tasks.tomestone.dev',
+  },
+];
+
 const app = new cdk.App();
 
-const staging = new PipelineStack(app, "Staging-DeliveryPipeline", {
-    name: "App-Staging",
-    branch: "develop",
+envs.forEach(({stage, branch, domain}) => {
+  new PipelineStack(app, `${stage}-DeliveryPipeline`, {
+    name: `App-${stage}`,
+    branch,
+    domain,
+  }).pipeline.addApplicationStage(
+    new FrontEndStage(app, `${stage}-App`, {
+      domain,
+    })
+  );
 });
-
-const stagingStage = new FrontEndStage(app, "Staging-App", {
-    stage: "staging",
-});
-
-staging.pipeline.addApplicationStage(stagingStage);
-
-const prod = new PipelineStack(app, "Prod-DeliveryPipeline", {
-    name: "App-Prod",
-    branch: "main",
-});
-
-const prodStage = new FrontEndStage(app, "Prod-App", {
-    stage: "prod",
-});
-
-prod.pipeline.addApplicationStage(prodStage);
