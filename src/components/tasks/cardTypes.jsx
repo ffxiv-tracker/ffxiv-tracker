@@ -87,12 +87,12 @@ export function CategoryTask(props) {
     return (
         <div className="tab-space">
             {loaded ? <Center>
-                <Box className="category-card" justify="space-between" align="middle" width="90%" borderWidth="1px" borderTop="0px">
+                <Box className="category-card" justify="space-between" align="middle" width="90%" borderTop="0px" >
                     <Accordion className={`${checked && type!=="master" ? "checked-collapse" : ""}`} defaultIndex={[0]} allowMultiple allowToggle>
-                        <AccordionItem>
-                            <AccordionButton bg= "blue.700" _expanded={{ bg: "blue.700", color: "white" }} _hover={{ bg: "blue.700", color: "white" }}>
+                        <AccordionItem borderRadius='lg' borderWidth='1px' marginBottom="1%">
+                            <AccordionButton  _expanded={{ color: "white" }} _hover={{ borderRadius: "0.5rem 0.5rem 0 0", bg: "blue.700", color: "white" }}>
                                 <Flex width="100%" justify="space-between" align="center" wrap="wrap">
-                                    <Heading size="sm">{category}</Heading>
+                                    <Heading as="u" size="md">{category}</Heading>
                                     {type==="master" ? categorySubmit : categoryCheckbox}
                                 </Flex>
                             </AccordionButton>
@@ -100,13 +100,13 @@ export function CategoryTask(props) {
                                 <Box>
                                     {type==="master" ? <Checkbox.Group options={taskNames} value={selectedTasks} onChange={onCategoryTaskChange} /> :
                                     <CheckboxGroup value={checkedList} onChange={onIndeterminateChange} className="checkbox-group" >
-                                        <Flex align="center" justify="center" wrap="wrap" width="100%">
+                                        <Flex align="center" justify="left" wrap="wrap" width="100%">
                                             {taskNames.map(option =>
-                                                <Box key={option}className="checkbox-block">
-                                                    <Flex direction="column" align="center">
-                                                        <img className="checkbox-image" src={`/images/${option}.png`} onError={(e)=>{e.target.onError = null; e.target.src = "/images/default.png"}} alt="Checkbox Icon" />
-                                                        {option}
+                                                <Box key={option} className="checkbox-block">
+                                                    <Flex direction="row" align="center">
+                                                        {/* <img className="checkbox-image" src={`/images/${option}.png`} onError={(e)=>{e.target.onError = null; e.target.src = "/images/default.png"}} alt="Checkbox Icon" /> */}
                                                         <Checkbox className="checkbox-label" key={option} value={option} onChange={onSingleChange} />
+                                                        {option}
                                                     </Flex>
                                                 </Box>
                                                 )}

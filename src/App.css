@@ -70,16 +70,18 @@
 }
 .checkbox-block {
     display: flex;
-    align-items: center;
+    align-items: left;
     flex-direction: column;
-    padding: 3%;
+    min-width: 90%;
+    padding: 0.5%;
 }
 .checkbox-image {
     max-width: 64px;
 }
 .checkbox-label {
-    padding: 2%;
+    padding: 0.5%;
     font-weight: normal;
+    margin-right: 10px;
 }
 
 /* Splash CSS */

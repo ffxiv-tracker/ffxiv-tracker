@@ -13,38 +13,42 @@ export default function TasksPage() {
                     <Spacer />
                     <Box width="40%">
                         <Heading className="page-header">Daily Tasks</Heading>
-                        {data.filter(t => t.frequency === 'Daily').map((task, index) => {
-                            let names = []
-                            let done = []
-                            task.tasks.map((task)=>{
-                                names.push(task.name)
-                                if(task.done === true){
-                                    done.push(task.name)
-                                }
-                                return task
-                            })
-                            return (
-                                <CategoryTask key={index} category={task.category} taskNames={names} completeTasks={done} tags={[]} frequency="Daily" type="" />
-                            )
-                        })}
+                        <Box borderWidth='1px' padding="3% 0"  borderRadius='lg'>
+                            {data.filter(t => t.frequency === 'Daily').map((task, index) => {
+                                let names = []
+                                let done = []
+                                task.tasks.map((task)=>{
+                                    names.push(task.name)
+                                    if(task.done === true){
+                                        done.push(task.name)
+                                    }
+                                    return task
+                                })
+                                return (
+                                    <CategoryTask key={index} category={task.category} taskNames={names} completeTasks={done} tags={[]} frequency="Daily" type="" />
+                                )
+                            })}
+                        </Box>
                     </Box>
                     <Spacer />
                     <Box width="40%" className="">
                         <Heading className="page-header">Weekly Tasks</Heading>
-                        {data.filter(t => t.frequency === 'Weekly').map((task, index) => {
-                            let names = []
-                            let done = []
-                            task.tasks.map((task)=>{
-                                names.push(task.name)
-                                if(task.done === true){
-                                    done.push(task.name)
-                                }
-                                return task
-                            })
-                            return (
-                                <CategoryTask key={index} category={task.category} tasks={task.tasks} taskNames={names} completeTasks={done} tags={[]} frequency="Weekly" type="" />
-                            )
-                        })}
+                        <Box borderWidth='1px' padding="3% 0" borderRadius='lg'>
+                            {data.filter(t => t.frequency === 'Weekly').map((task, index) => {
+                                let names = []
+                                let done = []
+                                task.tasks.map((task)=>{
+                                    names.push(task.name)
+                                    if(task.done === true){
+                                        done.push(task.name)
+                                    }
+                                    return task
+                                })
+                                return (
+                                    <CategoryTask key={index} category={task.category} tasks={task.tasks} taskNames={names} completeTasks={done} tags={[]} frequency="Weekly" type="" />
+                                )
+                            })}
+                        </Box>
                     </Box>
                     <Spacer />
                 </Flex>
