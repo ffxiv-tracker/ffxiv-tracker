@@ -54,7 +54,7 @@ export default function DailyTasks() {
     const onFinish = (event, values) => {
         event.preventDefault();
         let customTasks = data.filter(t => t.frequency === frequency).reduce(function (newArr, task) {
-            if (task.category === 'Custom') {
+            if (task.category === 'Custom Tasks') {
                 task.tasks.map((subtask) => {
                     newArr.push(subtask.name);
                     return null
@@ -65,7 +65,7 @@ export default function DailyTasks() {
         }, []);
         customTasks.push(newTask)
         const newTaskObject = {
-            "category": "Custom",
+            "category": "Custom Tasks",
             "frequency": frequency,
             "tasks": customTasks
         }
